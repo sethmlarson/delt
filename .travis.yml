@@ -1,0 +1,40 @@
+language: python
+sudo: false
+os: linux
+
+cache:
+  directories:
+    - $HOME/.cache
+
+matrix:
+  include:
+    - python: 3.6
+      env: NOXSESSION=lint
+    - python: 3.6
+      env: NOXSESSION=docs
+    - python: 2.7
+      env: NOXSESSION=tests
+    - python: 3.4
+      env: NOXSESSION=tests
+    - python: 3.5
+      env: NOXSESSION=tests
+    - python: 3.6
+      env: NOXSESSION=tests
+    - python: 3.7
+      env: NOXSESSION=tests
+
+install:
+  - python -m pip install -U nox
+
+script:
+  - python -m nox
+
+after_success:
+  - |
+    if [ -f .coverage ]; then
+      python -m pip install -U codecov;
+      codecov;
+    fi
+
+notifications:
+  email: false

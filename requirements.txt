@@ -1,0 +1,5 @@
+click
+distro
+colorama
+pyyaml
+urllib3[secure]

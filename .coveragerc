@@ -1,0 +1,11 @@
+[run]
+source =
+    delt
+
+[paths]
+source =
+    src/delt
+    .nox/*/site-packages/urllib3
+
+[report]
+branch = true
