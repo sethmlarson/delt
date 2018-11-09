@@ -7,10 +7,32 @@ class CISource(DataSource):
 
 
 class CircleCISource(CISource):
-    """Gathers environment variables from CircleCI builds and
-    puts them into structured data.
+    """
+        The following values are gathered for Travis environments:
 
-    See: https://circleci.com/docs/2.0/env-vars/
+    * ``circleci.branch`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.username`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.build_number`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.job_name`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.job_number`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.job_total`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.previous_build_number`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.project_name`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.project_owner`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.commit_sha`` (``str``) Same value as ``CIRCLE_BRANCH``
+    * ``circleci.tag`` (``str``) Same value as ``CIRCLE_BRANCH``
+
+    .. note::
+       The following values are only gathered for Pull Request builds:
+
+    * ``circleci.pull_request.number`` (``int``) Same value as ``TRAVIS_PULL_REQUEST``
+    * ``circleci.pull_request.username`` (``str``) Same value as ``TRAVIS_PULL_REQUEST_SLUG``
+    * ``circleci.pull_request.project_name`` (``str``) Same value as ``TRAVIS_PULL_REQUEST_SLUG``
+
+    .. note::
+       See the `CircleCI Documentation for Environment Variables`_ for more information
+
+    .. _CircleCI Documentation for Environment Variables: https://circleci.com/docs/2.0/env-vars/
     """
     display_name = "CircleCI"
     key_prefix = "circleci"
@@ -23,7 +45,7 @@ class CircleCISource(CISource):
             "branch": os.environ.get("CIRCLE_BRANCH", None),
             "username": os.environ.get("CIRCLE_USERNAME"),
             "build_number": self.get_from_environ("CIRCLE_BUILD_NUM", normalizer=int),
-            "job": self.get_from_environ("CIRCLE_JOB"),
+            "job_name": self.get_from_environ("CIRCLE_JOB"),
             "job_number": self.get_from_environ("CIRCLE_NODE_INDEX", normalizer=int),
             "job_total": self.get_from_environ("CIRCLE_NODE_TOTAL", normalizer=int),
             "previous_build_number": self.get_from_environ(

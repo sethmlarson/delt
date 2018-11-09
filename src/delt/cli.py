@@ -1,6 +1,7 @@
 import sys
 import click
 from delt.__about__ import __version__
+from delt.sources import ProjectSource
 
 
 @click.command(
@@ -12,3 +13,6 @@ def cli(version, quiet):
     if version:
         print("delt %s" % __version__)
         return sys.exit(0)
+
+    p = ProjectSource()
+    print(p.get_values())

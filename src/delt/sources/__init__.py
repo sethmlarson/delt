@@ -5,3 +5,4 @@ from ._lang import LanguageSource, PythonSource
 from ._lib import LibrarySource, OpenSSLSource
 from ._os import OperatingSystemSource
 from ._pm import PackageManagerSource, PipSource, AptSource
+from ._project import ProjectSource
