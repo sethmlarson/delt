@@ -8,9 +8,10 @@ Integrating Delt into your CI
 -----------------------------
 
 Integrating Delt into your builds is just one line of bash.
-Here's an example using Travis
+Here's an example using Travis:
 
 .. code-block:: yaml
+
     install:
       - install your dependencies...
 
