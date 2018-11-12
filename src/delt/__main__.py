@@ -1,3 +1,3 @@
-from delt import main
+from delt.cli import entry_point
 
-main()
+entry_point()
