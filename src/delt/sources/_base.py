@@ -5,6 +5,12 @@ class DataSource(object):
     priority = None
     name = None
 
+    PRI_VCS = 0
+    PRI_CI = 1
+    PRI_LANG = 2
+    PRI_PM = 3
+    PRI_SYS = 4
+
     def __init__(self, context):
         self.context = context  # type: DeltContext
 

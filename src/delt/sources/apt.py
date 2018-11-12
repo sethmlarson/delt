@@ -4,7 +4,7 @@ from ._base import DataSource
 
 class AptSource(DataSource):
     name = "apt"
-    priority = 2
+    priority = DataSource.PRI_PM
 
     apt_list_regex = re.compile(
         r"^([^/]+)/([^\s]+)\s+([^\s]+)\s+([^\s]+)(?:\s+\[[^\]]+\])?$"
@@ -30,6 +30,8 @@ class AptSource(DataSource):
                 )
 
         return {
-            "apt.version": self.context.get_output_from_popen("apt --version", pattern=r"\s+([\d\.]+)\s+"),
+            "apt.version": self.context.get_output_from_popen(
+                "apt --version", pattern=r"\s+([\d\.]+)\s+"
+            ),
             "apt.packages": sorted(packages, key=lambda x: x["name"].lower()),
         }

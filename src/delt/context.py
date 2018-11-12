@@ -17,26 +17,16 @@ class DeltContext(object):
     def __init__(self, args):
         self.args = args
         self.environ = os.environ.copy()
-        self.build_info = {
-            "delt.version": __version__
-        }
+        self.build_info = {"delt.version": __version__}
 
     @property
     def project_slug(self):
         project_host = self.build_info.get("project_host", None)
         project_owner = self.build_info.get("project_owner", None)
         project_name = self.build_info.get("project_name", None)
-        if (
-            project_host is None
-            or project_owner is None
-            or project_name is None
-        ):
+        if project_host is None or project_owner is None or project_name is None:
             return None
-        return "%s/%s/%s" % (
-            project_host,
-            project_owner,
-            project_name
-        )
+        return "%s/%s/%s" % (project_host, project_owner, project_name)
 
     def log(self, message, color=WHITE):
         self._output(message, color=color)
@@ -53,15 +43,18 @@ class DeltContext(object):
         """Dumps the build info into a JSON blob for uploading
         """
         return gzip.compress(
-            json.dumps(
-                self.build_info,
-                sort_keys=True,
-                separators=(",", ":")
-            ).encode("utf-8")
+            json.dumps(self.build_info, sort_keys=True, separators=(",", ":")).encode(
+                "utf-8"
+            )
         )
 
     def get_from_environ(
-        self, names, default=None, convert_empty_to_none=True, convert_bools=False, normalizer=None
+        self,
+        names,
+        default=None,
+        convert_empty_to_none=True,
+        convert_bools=False,
+        normalizer=None,
     ):
         """Gets a value from an environment variable and optionally normalizes
         and converts the values into non-string values.
@@ -119,6 +112,8 @@ class DeltContext(object):
         if pattern is not None:
             data = re.search(pattern, data).group(1)
 
+        self.debug(data)
+
         return data.strip()
 
     def get_returncode_from_popen(self, argv, shell=True):
@@ -128,10 +123,7 @@ class DeltContext(object):
         self.debug("Examining returncode of command %r" % argv)
         try:
             subprocess.check_call(
-                argv,
-                shell=shell,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.STDOUT
+                argv, shell=shell, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
             )
             return True
         except subprocess.SubprocessError:

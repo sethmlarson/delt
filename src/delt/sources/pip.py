@@ -4,7 +4,7 @@ from ._base import DataSource
 
 class PipSource(DataSource):
     name = "pip"
-    priority = 2
+    priority = DataSource.PRI_PM
 
     pip_freeze_regex = re.compile(r"^([^=]+)==([^=]+)$")
 
@@ -21,6 +21,8 @@ class PipSource(DataSource):
             if match:
                 packages.append({"name": match.group(1), "version": match.group(2)})
         return {
-            "pip.version": self.context.get_output_from_popen("pip --version", pattern=r"\s+([\d\.]+)\s+"),
+            "pip.version": self.context.get_output_from_popen(
+                "pip --version", pattern=r"\s+([\d\.]+)\s+"
+            ),
             "pip.packages": sorted(packages, key=lambda x: x["name"].lower()),
         }
