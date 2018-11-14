@@ -10,7 +10,7 @@ class GitSource(DataSource):
     host_regexes = [
         (
             "github",
-            r"(?:https?|git)://(?:www\.)?github\.com/([^\s/]+)/([^\s/]+?)(?:\.git)?",
+            r"^[^\s]+\s+(?:https?|git)://(?:www\.)?github\.com/([^\s/]+)/([^\s/]+?)(?:\.git)?\s+\([^\)]+\)?$",
         )
     ]
 
@@ -39,15 +39,23 @@ class GitSource(DataSource):
         ).strftime("%Y-%m-%dT%H:%M:%S")
 
         remote = self.context.get_output_from_popen("git remote -v")
-        for project_host, pattern in self.host_regexes:
-            match = re.search(pattern, remote)
-            if match:
-                obj.update(
-                    {
-                        "project_host": project_host,
-                        "project_owner": match.group(1),
-                        "project_name": match.group(2),
-                    }
-                )
+
+        for line in remote.split("\n"):
+            line = line.strip()
+            for project_host, pattern in self.host_regexes:
+                match = re.match(pattern, line)
+                if match:
+                    obj.update(
+                        {
+                            "project_host": project_host,
+                            "project_owner": match.group(1),
+                            "project_name": match.group(2),
+                        }
+                    )
+                    line = None
+                    break
+
+            if line is None:
+                break
 
         return obj
