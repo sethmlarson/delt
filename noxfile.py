@@ -3,6 +3,13 @@ import nox.sessions
 
 
 @nox.session(reuse_venv=True)
+def blacken(session):
+    session.install("black")
+
+    session.run("black", "src/")
+
+
+@nox.session(reuse_venv=True)
 def lint(session):
     session.install("flake8")
     session.install("flake8-bugbear")

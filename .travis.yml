@@ -2,6 +2,10 @@ language: python
 sudo: false
 os: linux
 
+branches:
+  only:
+    - master
+
 cache:
   directories:
     - $HOME/.cache
@@ -25,6 +29,10 @@ matrix:
 
 install:
   - python -m pip install -U nox
+
+before_install:
+  - python setup.py install
+  - delt --debug
 
 script:
   - python -m nox
