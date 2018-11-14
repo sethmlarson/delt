@@ -5,7 +5,8 @@ import requests
 from delt.__about__ import __version__
 from delt.context import DeltContext
 from delt.sources import DataSource
-from delt.utils import urljoin
+from delt.context import GREEN
+from six.moves.urllib.parse import urljoin
 
 
 def main(argv):
@@ -50,7 +51,7 @@ def main(argv):
     )
     enterprise.add_argument(
         "--upload-url",
-        default="https://cloudfunctions.net/delt-api",
+        default="https://us-central1-delt-io.cloudfunctions.net",
         help="Base URL to upload results to",
     )
     enterprise.add_argument("--build-url", help="URL for the current build")
@@ -121,7 +122,7 @@ def discover_build_info(context):
         source.discover_info()
 
     # Add all unconsumed environment variables to the 'env' key
-    context.build_info["env"] = context.environ
+    context.build_info["env"] = context.get_env_source()
     return 0
 
 
@@ -129,9 +130,13 @@ def upload_environment(context):
     context.log("Uploading environment...")
 
     # Build the upload URL based on --upload-url and project_slug
-    upload_url = urljoin(context.args.upload_url, "api", context.project_slug, "upload")
+    upload_url = urljoin(context.args.upload_url, "upload")
 
-    blob = context.dumps()
+    params = context.request_params()
+    if params is None:
+        return 1
+
+    blob = context.request_data()
     headers = {
         "Content-Encoding": "gzip",
         "Content-Type": "application/json",
@@ -158,6 +163,7 @@ def upload_environment(context):
         allow_redirects=False,
         cert=context.args.cert,
         data=blob,
+        params=params,
     ) as r:
         pass
 

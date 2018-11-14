@@ -102,17 +102,7 @@ class TravisSource(DataSource):
             "TRAVIS_PULL_REQUEST", normalizer=lambda x: int(x) if x != "false" else None
         )
         if pull_request_number:
-            project_owner, project_name = self._split_project_slug(
-                self.context.get_from_environ("TRAVIS_PULL_REQUEST_SLUG")
-            )
-
-            obj["pull_request"] = {
-                "number": pull_request_number,
-                "commit_sha": self.get_from_environ("TRAVIS_PULL_REQUEST_SHA"),
-                "branch": self.get_from_environ("TRAVIS_PULL_REQUEST_BRANCH"),
-                "project_owner": project_owner,
-                "project_name": project_name,
-            }
+            obj["pull_request"] = pull_request_number
 
         for lang in [
             "dart",

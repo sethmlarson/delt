@@ -3,30 +3,44 @@ import gzip
 import os
 import subprocess
 import re
+import six
+import colorama
 from delt.__about__ import __version__
 
 
-RED = "\033[1m\033[91m"
-GREEN = "\033[1m\033[92m"
-WHITE = "\033[1m\033[97m"
-GREY = "\033[97m"
-RESET_ALL = "\033[0m"
+colorama.init()
+
+
+RED = colorama.Fore.LIGHTRED_EX
+GREEN = colorama.Fore.LIGHTGREEN_EX
+WHITE = colorama.Fore.LIGHTWHITE_EX
+GREY = colorama.Fore.WHITE
+RESET_ALL = colorama.Style.RESET_ALL
 
 
 class DeltContext(object):
+
+    request_param_names = {
+        "service",
+        "branch",
+        "commit",
+        "committed_at",
+        "pull_request",
+        "url",
+        "tag",
+        "project_host",
+        "project_owner",
+        "project_name",
+    }
+    optional_param_names = {"tag", "pull_request", "service", "committed_at", "url"}
+
+    env_path_delimiter = ";" if os.name == "nt" else ":"
+    env_delimited_names = {"PATH", "LD_LIBRARY_PATH"}
+
     def __init__(self, args):
         self.args = args
         self.environ = os.environ.copy()
         self.build_info = {"delt.version": __version__}
-
-    @property
-    def project_slug(self):
-        project_host = self.build_info.get("project_host", None)
-        project_owner = self.build_info.get("project_owner", None)
-        project_name = self.build_info.get("project_name", None)
-        if project_host is None or project_owner is None or project_name is None:
-            return None
-        return "%s/%s/%s" % (project_host, project_owner, project_name)
 
     def log(self, message, color=WHITE):
         self._output(message, color=color)
@@ -39,7 +53,20 @@ class DeltContext(object):
             return
         self._output("-> " + message, color=GREY)
 
-    def dumps(self):
+    def request_params(self):
+        """Convert all build information used for """
+        params = {}
+        for key in self.request_param_names:
+            value = self.build_info.pop(key, None)
+            if value is None and key not in self.optional_param_names:
+                self.error("The required key '%s' could not be found." % key)
+                return None
+            if value:
+                params[key] = value
+
+        return params
+
+    def request_data(self):
         """Dumps the build info into a JSON blob for uploading
         """
         return gzip.compress(
@@ -47,6 +74,15 @@ class DeltContext(object):
                 "utf-8"
             )
         )
+
+    def get_env_source(self):
+        env = {}
+        for name, value in six.iteritems(self.environ):
+            if name in self.env_delimited_names:
+                env[name] = value.split(self.env_path_delimiter)
+            else:
+                env[name] = value
+        return env
 
     def get_from_environ(
         self,

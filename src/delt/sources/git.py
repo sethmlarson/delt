@@ -1,3 +1,4 @@
+import datetime
 import re
 from ._base import DataSource
 
@@ -21,6 +22,15 @@ class GitSource(DataSource):
             ),
             "commit": self.context.get_output_from_popen("git rev-parse HEAD"),
         }
+
+        unix_timestamp = int(
+            self.context.get_output_from_popen(
+                "git show --quiet --format=%%ct %s" % (obj["commit"])
+            )
+        )
+        obj["committed_at"] = datetime.datetime.utcfromtimestamp(
+            unix_timestamp
+        ).strftime("%Y-%m-%dT%H:%M:%S")
 
         remote = self.context.get_output_from_popen("git remote -v")
         for project_host, pattern in self.host_regexes:
