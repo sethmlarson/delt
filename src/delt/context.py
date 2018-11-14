@@ -168,7 +168,7 @@ class DeltContext(object):
                 argv, shell=shell, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
             )
             return True
-        except subprocess.SubprocessError:
+        except subprocess.CalledProcessError:
             return False
 
     def _output(self, message, color):
