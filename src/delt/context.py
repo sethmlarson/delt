@@ -146,7 +146,7 @@ class DeltContext(object):
         if stderr:
             kwargs["stderr"] = subprocess.STDOUT
         else:
-            kwargs["stderr"] = subprocess.DEVNULL
+            kwargs["stderr"] = DEVNULL
         if shell:
             kwargs["shell"] = True
         proc = subprocess.Popen(argv, **kwargs)
