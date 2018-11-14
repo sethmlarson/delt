@@ -7,6 +7,11 @@ import six
 import colorama
 from delt.__about__ import __version__
 
+try:
+    from subprocess import DEVNULL
+except ImportError:
+    DEVNULL = open(os.devnull, "w")
+
 
 colorama.init()
 
@@ -165,7 +170,7 @@ class DeltContext(object):
         self.debug("Examining returncode of command %r" % argv)
         try:
             subprocess.check_call(
-                argv, shell=shell, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+                argv, shell=shell, stdout=DEVNULL, stderr=subprocess.STDOUT
             )
             return True
         except subprocess.CalledProcessError:

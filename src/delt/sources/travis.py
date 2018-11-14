@@ -93,12 +93,8 @@ class TravisSource(DataSource):
             "travis.build_stage": self.context.get_from_environ(
                 "TRAVIS_BUILD_STAGE_NAME"
             ),
-            "travis.dist": self.context.get_from_environ(
-                "TRAVIS_DIST"
-            ),
-            "travis.infra": self.context.get_from_environ(
-                "TRAVIS_INFRA"
-            )
+            "travis.dist": self.context.get_from_environ("TRAVIS_DIST"),
+            "travis.infra": self.context.get_from_environ("TRAVIS_INFRA"),
         }
 
         if self.context.get_from_environ("TRAVIS_OS_NAME") == "macos":
@@ -128,7 +124,9 @@ class TravisSource(DataSource):
         ]:
             env_name = "TRAVIS_%s_VERSION" % lang.upper()
             if env_name in self.context.environ:
-                obj["travis.%s.version" % lang] = self.context.get_from_environ(env_name)
+                obj["travis.%s.version" % lang] = self.context.get_from_environ(
+                    env_name
+                )
 
         if "TRAVIS_XCODE_SDK" in self.context.environ:
             obj["travis.xcode_sdk"] = self.context.get_from_environ("TRAVIS_XCODE_SDK")
@@ -137,12 +135,7 @@ class TravisSource(DataSource):
             )
 
         self.context.pop_from_environ(
-            [
-                "CI",
-                "TRAVIS",
-                "CONTINUOUS_INTEGRATION",
-                "HAS_JOSH_K_SEAL_OF_APPROVAL"
-            ]
+            ["CI", "TRAVIS", "CONTINUOUS_INTEGRATION", "HAS_JOSH_K_SEAL_OF_APPROVAL"]
         )
         self.context.pop_from_environ(
             [x for x in self.context.environ if x.startswith("TRAVIS_")]
