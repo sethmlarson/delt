@@ -6,33 +6,19 @@ class TravisSource(DataSource):
     The following values are gathered for Travis environments:
 
     * ``travis.allow_failure`` (``bool``) Same value as ``TRAVIS_ALLOW_FAILURE``
-    * ``travis.build_number`` (``int``) Same value as ``TRAVIS_BUILD_NUMBER``
-    * ``travis.job_number`` (``int``) Same value as ``TRAVIS_JOB_NUMBER``
     * ``travis.trigger`` (``str``) Same value as ``TRAVIS_EVENT_TYPE``
-    * ``travis.commit_sha`` (``str``) Same value as ``TRAVIS_COMMIT_SHA``
-    * ``travis.branch`` (``str``) Same value as ``TRAVIS_BRANCH``
-    * ``travis.project_owner`` (``str``) Same value as ``TRAVIS_REPO_SLUG``
-    * ``travis.project_name`` (``str``) Same value as ``TRAVIS_REPO_SLUG``
     * ``travis.secure_env_vars`` (``bool``) Same value as ``TRAVIS_SECURE_ENV_VARS``
-    * ``travis.tag`` (``str``) Same value as ``TRAVIS_TAG``
     * ``travis.build_stage`` (``str``) Same value as ``TRAVIS_BUILD_STAGE_NAME``
     * ``travis.os_name`` (``str``) Same value as ``TRAVIS_OS_NAME``
-
-    .. note::
-       The following values are only gathered for Pull Request builds:
-
-    * ``travis.pull_request.number`` (``int``) Same value as ``TRAVIS_PULL_REQUEST``
-    * ``travis.pull_request.project_name`` (``str``) Same value as ``TRAVIS_PULL_REQUEST_SLUG``
-    * ``travis.pull_request.project_owner`` (``str``) Same value as ``TRAVIS_PULL_REQUEST_SLUG``
-    * ``travis.pull_request.branch`` (``str``) Same value as ``TRAVIS_PULL_REQUEST_BRANCH``
-    * ``travis.pull_request.commit_sha`` (``str``) Same value as ``TRAVIS_PULL_REQUEST_SHA``
+    * ``travis.dist`` (``str``) Same value as ``TRAVIS_DIST``
+    * ``travis.infra`` (``str``) Same value as ``TRAVIS_INFRA``
 
     .. note::
        The following values are only gathered for macOS builds:
 
     * ``travis.osx_image`` (``str``) Same value as ``TRAVIS_OSX_IMAGE``
-    * ``travis.xcode.sdk`` (``str``) Same value as ``TRAVIS_XCODE_SDK``
-    * ``travis.xcode.scheme`` (``str``) Same value as ``TRAVIS_XCODE_SCHEME``
+    * ``travis.xcode_sdk`` (``str``) Same value as ``TRAVIS_XCODE_SDK``
+    * ``travis.xcode_scheme`` (``str``) Same value as ``TRAVIS_XCODE_SCHEME``
 
     .. note::
        The following values are set depending on which language(s) the build uses:
@@ -93,6 +79,7 @@ class TravisSource(DataSource):
             "travis.build_stage": self.context.get_from_environ(
                 "TRAVIS_BUILD_STAGE_NAME"
             ),
+            "travis.os_name": self.context.get_from_environ("TRAVIS_OS_NAME"),
             "travis.dist": self.context.get_from_environ("TRAVIS_DIST"),
             "travis.infra": self.context.get_from_environ("TRAVIS_INFRA"),
         }
@@ -135,7 +122,14 @@ class TravisSource(DataSource):
             )
 
         self.context.pop_from_environ(
-            ["CI", "TRAVIS", "CONTINUOUS_INTEGRATION", "HAS_JOSH_K_SEAL_OF_APPROVAL"]
+            [
+                "CI",
+                "TRAVIS",
+                "CONTINUOUS_INTEGRATION",
+                "HAS_JOSH_K_SEAL_OF_APPROVAL",
+                # See: https://twitter.com/travisci/status/765883186131894273
+                "HAS_ANTARES_THREE_LITTLE_FRONZIES_BADGE",
+            ]
         )
         self.context.pop_from_environ(
             [x for x in self.context.environ if x.startswith("TRAVIS_")]
