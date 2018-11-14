@@ -32,7 +32,7 @@ class DeltContext(object):
         "project_owner",
         "project_name",
     }
-    optional_param_names = {"tag", "pull_request", "service", "committed_at", "url"}
+    optional_param_names = {"tag", "pull_request", "branch", "committed_at"}
 
     env_path_delimiter = ";" if os.name == "nt" else ":"
     env_delimited_names = {"PATH", "LD_LIBRARY_PATH"}
@@ -63,6 +63,12 @@ class DeltContext(object):
                 return None
             if value:
                 params[key] = value
+
+        if "branch" not in params and "pull_request" not in params:
+            self.error(
+                "One of the required key(s) 'branch' and 'pull_request' could not be found."
+            )
+            return None
 
         return params
 

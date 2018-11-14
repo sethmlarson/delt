@@ -7,7 +7,12 @@ class GitSource(DataSource):
     name = "git"
     priority = DataSource.PRI_VCS
 
-    host_regexes = [("github", r"https://github.com/([^\s/]+)/([^\s/]+)")]
+    host_regexes = [
+        (
+            "github",
+            r"(?:https?|git)://(?:www\.)?github\.com/([^\s/]+)/([^\s/]+)(?:\.git)?",
+        )
+    ]
 
     def is_active(self):
         return self.context.get_returncode_from_popen("git --version")
@@ -17,11 +22,12 @@ class GitSource(DataSource):
             "git.version": self.context.get_output_from_popen(
                 "git --version", pattern=r"git version ([^\s]+)"
             ),
-            "branch": self.context.get_output_from_popen(
-                "git rev-parse --abbrev-ref HEAD"
-            ),
             "commit": self.context.get_output_from_popen("git rev-parse HEAD"),
         }
+
+        branch = self.context.get_output_from_popen("git rev-parse --abbrev-ref HEAD")
+        if branch != "HEAD":
+            obj["branch"] = branch
 
         unix_timestamp = int(
             self.context.get_output_from_popen(

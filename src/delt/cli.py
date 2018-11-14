@@ -73,6 +73,9 @@ def main(argv):
     debugging.add_argument(
         "--no-color", action="store_true", help="Don't use colors for terminal output"
     )
+    debugging.add_argument(
+        "--no-upload", action="store_true", help="Don't upload the environment"
+    )
 
     args = parser.parse_args(argv)
     context = DeltContext(args)
@@ -92,6 +95,10 @@ def main(argv):
 
     if discover_build_info(context):
         return 1
+
+    if context.args.no_upload:
+        context.log("Not uploading environment per the '--no-upload' parameter.")
+        return 0
 
     if upload_environment(context):
         return 1
@@ -123,6 +130,11 @@ def discover_build_info(context):
 
     # Add all unconsumed environment variables to the 'env' key
     context.build_info["env"] = context.get_env_source()
+
+    context.debug(
+        "Build info collected:\n%s"
+        % json.dumps(context.build_info, sort_keys=True, indent=2)
+    )
     return 0
 
 
@@ -148,10 +160,6 @@ def upload_environment(context):
     if context.args.token:
         context["Authorization"] = "Bearer %s" % context.args.token
 
-    context.debug(
-        "Build info collected:\n%s"
-        % json.dumps(context.build_info, sort_keys=True, indent=2)
-    )
     context.debug("Build info blob size: %d" % len(blob))
 
     # POST the environment to the upload URL
