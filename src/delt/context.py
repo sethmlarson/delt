@@ -1,11 +1,11 @@
 import json
-import gzip
 import os
 import subprocess
 import re
 import six
 import colorama
 from delt.__about__ import __version__
+from delt.utils import compress
 
 try:
     from subprocess import DEVNULL
@@ -80,7 +80,7 @@ class DeltContext(object):
     def request_data(self):
         """Dumps the build info into a JSON blob for uploading
         """
-        return gzip.compress(
+        return compress(
             json.dumps(self.build_info, sort_keys=True, separators=(",", ":")).encode(
                 "utf-8"
             )
