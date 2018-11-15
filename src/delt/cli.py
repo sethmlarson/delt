@@ -16,6 +16,7 @@ def main(argv):
     build_info.add_argument(
         "-X", "--disable", nargs="*", help="Names of environment sources to disable"
     )
+    build_info.add_argument("--project-slug", help="Project host, owner, and name delimited by '/'")
     build_info.add_argument(
         "--service", help="Specify the CI service being used for the current build"
     )
