@@ -1,6 +1,3 @@
-from delt.context import DeltContext  # noqa
-
-
 class DataSource(object):
     priority = None
     name = None
