@@ -19,7 +19,7 @@ matrix:
     - python: 2.7
       env: NOXSESSION=tests
     - python: 2.7
-      os: macos
+      os: osx
       script:
         - brew list --full-name --versions
     - python: 3.4
