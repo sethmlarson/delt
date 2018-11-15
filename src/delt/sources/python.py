@@ -19,4 +19,10 @@ class PythonSource(DataSource):
                 obj[bin_name + ".impl"] = self.context.get_output_from_popen(
                     '%s -c "import sys; print(sys.implementation.name)"' % bin_name
                 )
+
+        virtualenv = self.context.get_from_environ("VIRTUAL_ENV", default=None)
+        if virtualenv:
+            obj["python.virtualenv"] = virtualenv
+            self.context.pop_from_environ(["VIRTUAL_ENV"])
+
         return obj

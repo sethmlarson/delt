@@ -4,6 +4,7 @@ import subprocess
 import re
 import six
 import colorama
+from delt.sources import DataSource
 from delt.__about__ import __version__
 from delt.utils import compress
 
@@ -26,18 +27,23 @@ RESET_ALL = colorama.Style.RESET_ALL
 class DeltContext(object):
 
     request_param_names = {
-        "service",
-        "branch",
-        "commit",
-        "committed_at",
-        "pull_request",
-        "url",
-        "tag",
-        "project_host",
-        "project_owner",
-        "project_name",
+        DataSource.DELT_SERVICE,
+        DataSource.DELT_BRANCH,
+        DataSource.DELT_COMMIT,
+        DataSource.DELT_COMMITTED_AT,
+        DataSource.DELT_PULL_REQUEST,
+        DataSource.DELT_URL,
+        DataSource.DELT_TAG,
+        DataSource.DELT_PROJECT_HOST,
+        DataSource.DELT_PROJECT_OWNER,
+        DataSource.DELT_PROJECT_NAME,
     }
-    optional_param_names = {"tag", "pull_request", "branch", "committed_at"}
+    optional_param_names = {
+        DataSource.DELT_COMMITTED_AT,
+        DataSource.DELT_PULL_REQUEST,
+        DataSource.DELT_BRANCH,
+        DataSource.DELT_TAG
+    }
 
     env_path_delimiter = ";" if os.name == "nt" else ":"
     env_delimited_names = {"PATH", "LD_LIBRARY_PATH"}
@@ -46,6 +52,8 @@ class DeltContext(object):
         self.args = args
         self.environ = os.environ.copy()
         self.build_info = {"delt.version": __version__}
+
+        self.pop_from_environ(["LS_COLORS", "PS1", "PS2", "OLDPWD"])
 
     def log(self, message, color=WHITE):
         self._output(message, color=color)
@@ -59,7 +67,9 @@ class DeltContext(object):
         self._output("-> " + message, color=GREY)
 
     def request_params(self):
-        """Convert all build information used for """
+        """Pop all build information that are used for
+        marking an environment into request parameters.
+        """
         params = {}
         for key in self.request_param_names:
             value = self.build_info.pop(key, None)
@@ -67,11 +77,11 @@ class DeltContext(object):
                 self.error("The required key '%s' could not be found." % key)
                 return None
             if value:
-                params[key] = value
+                params[key.replace("delt.", "")] = value
 
-        if "branch" not in params and "pull_request" not in params:
+        if DataSource.DELT_BRANCH not in params and DataSource.DELT_PULL_REQUEST not in params:
             self.error(
-                "One of the required key(s) 'branch' and 'pull_request' could not be found."
+                "One of the required key(s) 'delt.branch' and 'delt.pull_request' could not be found."
             )
             return None
 

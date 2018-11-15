@@ -22,19 +22,19 @@ class GitSource(DataSource):
             "git.version": self.context.get_output_from_popen(
                 "git --version", pattern=r"git version ([^\s]+)"
             ),
-            "commit": self.context.get_output_from_popen("git rev-parse HEAD"),
+            DataSource.DELT_COMMIT: self.context.get_output_from_popen("git rev-parse HEAD"),
         }
 
         branch = self.context.get_output_from_popen("git rev-parse --abbrev-ref HEAD")
         if branch != "HEAD":
-            obj["branch"] = branch
+            obj[DataSource.DELT_BRANCH] = branch
 
         unix_timestamp = int(
             self.context.get_output_from_popen(
-                "git show --quiet --format=%%ct %s" % (obj["commit"])
+                "git show --quiet --format=%%ct %s" % (obj[DataSource.DELT_COMMIT])
             )
         )
-        obj["committed_at"] = datetime.datetime.utcfromtimestamp(
+        obj[DataSource.DELT_COMMITTED_AT] = datetime.datetime.utcfromtimestamp(
             unix_timestamp
         ).strftime("%Y-%m-%dT%H:%M:%S")
 
@@ -47,9 +47,9 @@ class GitSource(DataSource):
                 if match:
                     obj.update(
                         {
-                            "project_host": project_host,
-                            "project_owner": match.group(1),
-                            "project_name": match.group(2),
+                            DataSource.DELT_PROJECT_HOST: project_host,
+                            DataSource.DELT_PROJECT_OWNER: match.group(1),
+                            DataSource.DELT_PROJECT_NAME: match.group(2),
                         }
                     )
                     line = None

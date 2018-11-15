@@ -5,7 +5,7 @@ Installing Delt for Travis CI
 -----------------------------
 
 Put the following code into your ``before_script`` section of your ``.travis.yml`` file
-and you will automatically collect environment information with Delt.
+and you will automatically collect build environment information with Delt.
 
 .. code-block:: yaml
     :caption: travis.yml

@@ -39,23 +39,19 @@ def main(argv):
     build_info.add_argument(
         "--exclude-env",
         nargs="*",
-        default=["LS_COLORS", "PS1", "PS2"],
+        default=[],
         help="List of environment variable names to exclude that would otherwise be included",
     )
 
-    enterprise = parser.add_argument_group("Enterprise")
-    enterprise.add_argument("--token", help="Authorization token for private projects")
-    enterprise.add_argument(
-        "--project-slug",
-        help="Project slug in the format 'host/owner/name' (eg 'github/delt-io/delt')",
-    )
-    enterprise.add_argument(
+    private_enterprise = parser.add_argument_group("Private/Enterprise")
+    private_enterprise.add_argument("--token", help="Authorization token for private projects")
+    private_enterprise.add_argument(
         "--upload-url",
         default="https://us-central1-delt-io.cloudfunctions.net",
         help="Base URL to upload results to",
     )
-    enterprise.add_argument("--build-url", help="URL for the current build")
-    enterprise.add_argument("--cert", help="Path to a certificate to use for HTTPS")
+    private_enterprise.add_argument("--build-url", help="URL for the current build")
+    private_enterprise.add_argument("--cert", help="Path to a certificate to use for HTTPS")
 
     debugging = parser.add_argument_group("Debugging")
     debugging.add_argument(
