@@ -129,6 +129,15 @@ class TravisSource(DataSource):
                 "HAS_JOSH_K_SEAL_OF_APPROVAL",
                 # See: https://twitter.com/travisci/status/765883186131894273
                 "HAS_ANTARES_THREE_LITTLE_FRONZIES_BADGE",
+                "ANSI_CLEAR",
+                "ANSI_GREEN",
+                "ANSI_RED",
+                "ANSI_RESET",
+                "ANSI_YELLOW",
+                "_system_arch",
+                "_system_name",
+                "_system_type",
+                "_system_version",
             ]
         )
         self.context.pop_from_environ(
