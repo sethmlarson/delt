@@ -1,3 +1,4 @@
+language: python
 sudo: false
 os: linux
 
@@ -17,10 +18,6 @@ matrix:
       env: NOXSESSION=docs
     - python: 2.7
       env: NOXSESSION=tests
-    - python: 2.7
-      os: osx
-      script:
-        - brew list --full-name --versions
     - python: 3.4
       env: NOXSESSION=tests
     - python: 3.5

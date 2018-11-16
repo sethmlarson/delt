@@ -25,5 +25,5 @@ __all__ = [
     "SemaphoreSource",
     "OperatingSystemSource",
     "GitSource",
-    "GitLabRunnerSource"
+    "GitLabRunnerSource",
 ]

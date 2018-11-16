@@ -12,7 +12,9 @@ class BrewSource(DataSource):
         return self.context.get_returncode_from_popen("brew --version")
 
     def get_values(self):
-        brew_list = self.context.get_output_from_popen("brew list --full-name --versions")
+        brew_list = self.context.get_output_from_popen(
+            "brew list --full-name --versions"
+        )
         packages = {}
 
         for line in brew_list.split("\n"):

@@ -42,7 +42,7 @@ class DeltContext(object):
         DataSource.DELT_COMMITTED_AT,
         DataSource.DELT_PULL_REQUEST,
         DataSource.DELT_BRANCH,
-        DataSource.DELT_TAG
+        DataSource.DELT_TAG,
     }
 
     env_path_delimiter = ";" if os.name == "nt" else ":"

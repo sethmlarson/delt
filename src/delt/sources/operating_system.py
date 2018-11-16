@@ -10,8 +10,4 @@ class OperatingSystemSource(DataSource):
         return True
 
     def get_values(self):
-        return {
-            "os.name": distro.name(pretty=True),
-            "os.id": distro.id(),
-            "os.version": distro.version(best=True),
-        }
+        return {"os.id": distro.id(), "os.version": distro.version(best=True)}

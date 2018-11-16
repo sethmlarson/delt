@@ -22,7 +22,9 @@ class GitSource(DataSource):
             "git.version": self.context.get_output_from_popen(
                 "git --version", pattern=r"git version ([^\s]+)"
             ),
-            DataSource.DELT_COMMIT: self.context.get_output_from_popen("git rev-parse HEAD"),
+            DataSource.DELT_COMMIT: self.context.get_output_from_popen(
+                "git rev-parse HEAD"
+            ),
         }
 
         branch = self.context.get_output_from_popen("git rev-parse --abbrev-ref HEAD")

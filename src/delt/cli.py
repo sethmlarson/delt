@@ -16,7 +16,9 @@ def main(argv):
     build_info.add_argument(
         "-X", "--disable", nargs="*", help="Names of environment sources to disable"
     )
-    build_info.add_argument("--project-slug", help="Project host, owner, and name delimited by '/'")
+    build_info.add_argument(
+        "--project-slug", help="Project host, owner, and name delimited by '/'"
+    )
     build_info.add_argument(
         "--service", help="Specify the CI service being used for the current build"
     )
@@ -45,14 +47,18 @@ def main(argv):
     )
 
     private_enterprise = parser.add_argument_group("Private/Enterprise")
-    private_enterprise.add_argument("--token", help="Authorization token for private projects")
+    private_enterprise.add_argument(
+        "--token", help="Authorization token for private projects"
+    )
     private_enterprise.add_argument(
         "--upload-url",
         default="https://us-central1-delt-io.cloudfunctions.net",
         help="Base URL to upload results to",
     )
     private_enterprise.add_argument("--build-url", help="URL for the current build")
-    private_enterprise.add_argument("--cert", help="Path to a certificate to use for HTTPS")
+    private_enterprise.add_argument(
+        "--cert", help="Path to a certificate to use for HTTPS"
+    )
 
     debugging = parser.add_argument_group("Debugging")
     debugging.add_argument(
