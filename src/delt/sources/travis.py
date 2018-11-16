@@ -92,7 +92,7 @@ class TravisSource(DataSource):
             "TRAVIS_PULL_REQUEST", normalizer=lambda x: int(x) if x != "false" else None
         )
         if pull_request_number:
-            obj["pull_request"] = pull_request_number
+            obj[DataSource.DELT_PULL_REQUEST] = pull_request_number
 
         for lang in [
             "dart",
