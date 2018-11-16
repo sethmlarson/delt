@@ -59,13 +59,13 @@ class TravisSource(DataSource):
         )
 
         obj = {
-            "url": self.context.get_from_environ("TRAVIS_JOB_WEB_URL"),
-            "project_owner": project_owner,
-            "project_name": project_name,
-            "commit": self.context.get_from_environ("TRAVIS_COMMIT"),
-            "branch": self.context.get_from_environ("TRAVIS_BRANCH"),
-            "tag": self.context.get_from_environ("TRAVIS_TAG"),
-            "service": "travis",
+            DataSource.DELT_URL: self.context.get_from_environ("TRAVIS_JOB_WEB_URL"),
+            DataSource.DELT_PROJECT_OWNER: project_owner,
+            DataSource.DELT_PROJECT_NAME: project_name,
+            DataSource.DELT_COMMIT: self.context.get_from_environ("TRAVIS_COMMIT"),
+            DataSource.DELT_BRANCH: self.context.get_from_environ("TRAVIS_BRANCH"),
+            DataSource.DELT_TAG: self.context.get_from_environ("TRAVIS_TAG"),
+            DataSource.DELT_SERVICE: "travis",
             "travis.allow_failure": self.context.get_from_environ(
                 "TRAVIS_ALLOW_FAILURE", convert_bools=True
             ),
@@ -91,7 +91,7 @@ class TravisSource(DataSource):
             "TRAVIS_PULL_REQUEST", normalizer=lambda x: int(x) if x != "false" else None
         )
         if pull_request_number:
-            obj["pull_request"] = pull_request_number
+            obj[DataSource.DELT_PULL_REQUEST] = pull_request_number
 
         for lang in [
             "dart",

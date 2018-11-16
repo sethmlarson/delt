@@ -24,7 +24,7 @@ matrix:
       env: NOXSESSION=tests
     - python: 3.6
       env: NOXSESSION=tests
-    - python: 3.7
+    - python: 3.7-dev
       env: NOXSESSION=tests
 
 install:

@@ -1,6 +1,3 @@
-from delt.context import DeltContext  # noqa
-
-
 class DataSource(object):
     priority = None
     name = None
@@ -10,6 +7,20 @@ class DataSource(object):
     PRI_LANG = 2
     PRI_PM = 3
     PRI_SYS = 4
+
+    # These values are used for creating request arguments
+    # We group them together so they're near each other
+    # when using --debug
+    DELT_URL = "delt.url"
+    DELT_BRANCH = "delt.branch"
+    DELT_TAG = "delt.tag"
+    DELT_COMMIT = "delt.commit"
+    DELT_COMMITTED_AT = "delt.committed_at"
+    DELT_PULL_REQUEST = "delt.pull_request"
+    DELT_SERVICE = "delt.service"
+    DELT_PROJECT_HOST = "delt.project_host"
+    DELT_PROJECT_OWNER = "delt.project_owner"
+    DELT_PROJECT_NAME = "delt.project_name"
 
     def __init__(self, context):
         self.context = context  # type: DeltContext
