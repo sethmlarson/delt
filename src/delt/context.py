@@ -53,7 +53,14 @@ class DeltContext(object):
         self.environ = os.environ.copy()
         self.build_info = {"delt.version": __version__}
 
-        self.pop_from_environ(["LS_COLORS", "PS1", "PS2", "OLDPWD"])
+        self.pop_from_environ([
+            "LS_COLORS",
+            "PS1",
+            "PS2",
+            "PS3",
+            "PS4",
+            "OLDPWD",
+        ])
 
     def log(self, message, color=WHITE):
         self._output(message, color=color)
