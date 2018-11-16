@@ -79,7 +79,7 @@ class DeltContext(object):
             if value:
                 params[key.replace("delt.", "")] = value
 
-        if DataSource.DELT_BRANCH not in params and DataSource.DELT_PULL_REQUEST not in params:
+        if "branch" not in params and "pull_request" not in params:
             self.error(
                 "One of the required key(s) 'delt.branch' and 'delt.pull_request' could not be found."
             )
