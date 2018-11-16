@@ -2,6 +2,7 @@ from ._base import DataSource
 from .apt import AptSource
 from .appveyor import AppVeyorSource
 from .azure_pipelines import AzurePipelinesSource
+from .brew import BrewSource
 from .circleci import CircleCISource
 from .travis import TravisSource
 from .pip import PipSource
@@ -16,6 +17,7 @@ __all__ = [
     "AptSource",
     "AppVeyorSource",
     "AzurePipelinesSource",
+    "BrewSource",
     "CircleCISource",
     "TravisSource",
     "PipSource",

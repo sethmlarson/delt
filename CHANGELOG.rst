@@ -12,3 +12,4 @@ Unreleased (master)
 * Added support for Pip
 * Added support for Aptitude
 * Added support for Linux operating systems
+* Added support for Brew
