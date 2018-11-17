@@ -69,7 +69,6 @@ class TravisSource(DataSource):
             "travis.allow_failure": self.context.get_from_environ(
                 "TRAVIS_ALLOW_FAILURE", convert_bools=True
             ),
-            "travis.trigger": self.context.get_from_environ("TRAVIS_EVENT_TYPE"),
             "travis.secure_env_vars": self.context.get_from_environ(
                 "TRAVIS_SECURE_ENV_VARS", convert_bools=True
             ),
@@ -80,7 +79,7 @@ class TravisSource(DataSource):
                 "TRAVIS_BUILD_STAGE_NAME"
             ),
             "travis.os_name": self.context.get_from_environ("TRAVIS_OS_NAME"),
-            "travis.dist": self.context.get_from_environ("TRAVIS_DIST"),
+            "travis.dist": self.context.get_from_environ("TRAVIS_DIST", normalizer=lambda x: x if x != "notset" else None),
             "travis.infra": self.context.get_from_environ("TRAVIS_INFRA"),
         }
 

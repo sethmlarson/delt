@@ -7,6 +7,7 @@ class DataSource(object):
     PRI_LANG = 2
     PRI_PM = 3
     PRI_SYS = 4
+    PRI_UTIL = 5
 
     # These values are used for creating request arguments
     # We group them together so they're near each other

@@ -6,6 +6,7 @@ from .brew import BrewSource
 from .circleci import CircleCISource
 from .travis import TravisSource
 from .pip import PipSource
+from .pyenv import PyenvSource
 from .python import PythonSource
 from .ruby import RubySource
 from .rubygems import RubyGemsSource
@@ -23,6 +24,7 @@ __all__ = [
     "CircleCISource",
     "TravisSource",
     "PipSource",
+    "PyenvSource",
     "PythonSource",
     "RubySource",
     "RubyGemsSource",
