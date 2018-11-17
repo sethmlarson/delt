@@ -7,6 +7,8 @@ from .circleci import CircleCISource
 from .travis import TravisSource
 from .pip import PipSource
 from .python import PythonSource
+from .ruby import RubySource
+from .rubygems import RubyGemsSource
 from .semaphore import SemaphoreSource
 from .operating_system import OperatingSystemSource
 from .git import GitSource
@@ -22,6 +24,8 @@ __all__ = [
     "TravisSource",
     "PipSource",
     "PythonSource",
+    "RubySource",
+    "RubyGemsSource",
     "SemaphoreSource",
     "OperatingSystemSource",
     "GitSource",
