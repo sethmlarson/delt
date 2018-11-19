@@ -66,7 +66,9 @@ class TravisSource(DataSource):
             DataSource.DELT_BRANCH: self.context.get_from_environ("TRAVIS_BRANCH"),
             DataSource.DELT_TAG: self.context.get_from_environ("TRAVIS_TAG"),
             DataSource.DELT_SERVICE: "travis",
-            DataSource.DELT_BUILD_ID: f"travis{self.context.get_from_environ('TRAVIS_JOB_NUMBER')}",
+            DataSource.DELT_BUILD_ID: "travis%s" % (
+                self.context.get_from_environ('TRAVIS_JOB_NUMBER')
+            ),
             "travis.allow_failure": self.context.get_from_environ(
                 "TRAVIS_ALLOW_FAILURE", convert_bools=True
             ),
