@@ -103,11 +103,7 @@ def main(argv):
         context.log("Not uploading environment per the '--no-upload' parameter.")
         return 0
 
-    if upload_environment(context):
-        return 1
-
-    context.log("Successfully uploaded environment! :)", color=GREEN)
-    return 0
+    return upload_environment(context)
 
 
 def discover_build_info(context):
@@ -176,7 +172,16 @@ def upload_environment(context):
         data=blob,
         params=params,
     ) as r:
-        pass
+
+        if r.status_code == 200:
+            context.log("Successfully uploaded environment! :)", color=GREEN)
+            return 0
+        elif 400 <= r.status_code <= 499:
+            context.error("Error while uploading environment: %s" % r.json()["error"])
+            return 1
+        else:
+            context.error("Error while uploading environment: 'Cloud outage?'")
+            return 0
 
 
 def entry_point():

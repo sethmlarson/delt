@@ -22,6 +22,7 @@ class DataSource(object):
     DELT_PROJECT_HOST = "delt.project_host"
     DELT_PROJECT_OWNER = "delt.project_owner"
     DELT_PROJECT_NAME = "delt.project_name"
+    DELT_BUILD_ID = "delt.build_id"
 
     def __init__(self, context):
         self.context = context  # type: DeltContext

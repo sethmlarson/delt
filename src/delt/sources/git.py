@@ -38,7 +38,7 @@ class GitSource(DataSource):
         )
         obj[DataSource.DELT_COMMITTED_AT] = datetime.datetime.utcfromtimestamp(
             unix_timestamp
-        ).strftime("%Y-%m-%dT%H:%M:%S")
+        ).strftime("%Y-%m-%d %H:%M:%S")
 
         remote = self.context.get_output_from_popen("git remote -v")
 
