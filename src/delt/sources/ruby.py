@@ -9,4 +9,8 @@ class RubySource(DataSource):
         return self.context.get_returncode_from_popen("ruby --version")
 
     def get_values(self):
-        return {"ruby.version": self.context.get_output_from_popen("ruby --version", pattern=r"^ruby\s+([^\s]+)")}
+        return {
+            "ruby.version": self.context.get_output_from_popen(
+                "ruby --version", pattern=r"^ruby\s+([^\s]+)"
+            )
+        }

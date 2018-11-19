@@ -37,7 +37,7 @@ class DeltContext(object):
         DataSource.DELT_PROJECT_HOST,
         DataSource.DELT_PROJECT_OWNER,
         DataSource.DELT_PROJECT_NAME,
-        DataSource.DELT_BUILD_ID
+        DataSource.DELT_BUILD_ID,
     }
     optional_param_names = {
         DataSource.DELT_COMMITTED_AT,
@@ -52,18 +52,9 @@ class DeltContext(object):
     def __init__(self, args):
         self.args = args
         self.environ = os.environ.copy()
-        self.build_info = {
-            "delt.version": __version__,
-        }
+        self.build_info = {"delt.version": __version__}
 
-        self.pop_from_environ([
-            "LS_COLORS",
-            "PS1",
-            "PS2",
-            "PS3",
-            "PS4",
-            "OLDPWD",
-        ])
+        self.pop_from_environ(["LS_COLORS", "PS1", "PS2", "PS3", "PS4", "OLDPWD"])
 
     def log(self, message, color=WHITE):
         self._output(message, color=color)

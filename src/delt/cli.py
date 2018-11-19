@@ -79,6 +79,11 @@ def main(argv):
     debugging.add_argument(
         "--no-upload", action="store_true", help="Don't upload the environment"
     )
+    debugging.add_argument(
+        "--upload-required",
+        action="store_true",
+        help="Error even if uploading fails due to service outage",
+    )
 
     args = parser.parse_args(argv)
     context = DeltContext(args)
@@ -177,11 +182,11 @@ def upload_environment(context):
             context.log("Successfully uploaded environment! :)", color=GREEN)
             return 0
         elif 400 <= r.status_code <= 499:
-            context.error("Error while uploading environment: %s" % r.json()["error"])
+            context.error("Error while uploading environment :( %s" % r.json()["error"])
             return 1
         else:
-            context.error("Error while uploading environment: 'Cloud outage?'")
-            return 0
+            context.error("Error while uploading environment :( Service outage error")
+            return 1 if context.args.upload_required else 0
 
 
 def entry_point():

@@ -12,9 +12,7 @@ class RubyGemsSource(DataSource):
         return self.context.get_returncode_from_popen("gem --version")
 
     def get_values(self):
-        gem_list = self.context.get_output_from_popen(
-            "gem list"
-        )
+        gem_list = self.context.get_output_from_popen("gem list")
         packages = {}
         for line in gem_list.split("\n"):
             match = self.gem_list_regex.match(line.strip())

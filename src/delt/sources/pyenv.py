@@ -24,7 +24,9 @@ class PyenvSource(DataSource):
                 versions.append(version)
 
         return {
-            "pyenv.version": self.context.get_output_from_popen("pyenv --version", pattern=r"pyenv\s+([^\s]+)"),
+            "pyenv.version": self.context.get_output_from_popen(
+                "pyenv --version", pattern=r"pyenv\s+([^\s]+)"
+            ),
             "pyenv.current_version": current_version,
-            "pyenv.versions": sorted(versions)
+            "pyenv.versions": sorted(versions),
         }
