@@ -53,12 +53,7 @@ class DeltContext(object):
         DELT_PROJECT_NAME,
         DELT_BUILD_ID,
     }
-    optional_param_names = {
-        DELT_COMMITTED_AT,
-        DELT_PULL_REQUEST,
-        DELT_BRANCH,
-        DELT_TAG,
-    }
+    optional_param_names = {DELT_COMMITTED_AT, DELT_PULL_REQUEST, DELT_BRANCH, DELT_TAG}
 
     env_path_delimiter = ";" if os.name == "nt" else ":"
     env_delimited_names = {"PATH", "LD_LIBRARY_PATH"}
