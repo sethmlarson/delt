@@ -10,6 +10,7 @@ jobs:
       - run:
           name: save build info
           command: |
+            python -m venv venv/
             . venv/bin/activate
             python setup.py install
             delt --debug
