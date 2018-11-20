@@ -1,0 +1,3 @@
+include README.rst CHANGELOG.rst LICENSE
+recursive-include docs *
+recursive-exclude docs/build *
