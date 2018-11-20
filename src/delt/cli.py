@@ -143,14 +143,14 @@ def discover_build_info(context):
 
 
 def upload_environment(context):
+    params = context.request_params()
+    if params is None:
+        return 1
+
     context.log("Uploading environment...")
 
     # Build the upload URL based on --upload-url and project_slug
     upload_url = urljoin(context.args.upload_url, "upload")
-
-    params = context.request_params()
-    if params is None:
-        return 1
 
     blob = context.request_data()
     headers = {

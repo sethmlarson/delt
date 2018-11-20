@@ -13,3 +13,4 @@ Unreleased (master)
 * Added support for Linux operating systems
 * Added support for Brew
 * Added support for Ruby and RubyGems
+* Added support for CircleCI
