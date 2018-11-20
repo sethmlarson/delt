@@ -6,7 +6,6 @@ class TravisSource(DataSource):
     The following values are gathered for Travis environments:
 
     * ``travis.allow_failure`` (``bool``) Same value as ``TRAVIS_ALLOW_FAILURE``
-    * ``travis.trigger`` (``str``) Same value as ``TRAVIS_EVENT_TYPE``
     * ``travis.secure_env_vars`` (``bool``) Same value as ``TRAVIS_SECURE_ENV_VARS``
     * ``travis.build_stage`` (``str``) Same value as ``TRAVIS_BUILD_STAGE_NAME``
     * ``travis.os_name`` (``str``) Same value as ``TRAVIS_OS_NAME``
@@ -23,25 +22,38 @@ class TravisSource(DataSource):
     .. note::
        The following values are set depending on which language(s) the build uses:
 
-    * ``travis.languages.dart`` (``str``) Version of Dart being used. Same value as ``TRAVIS_DART_VERSION``.
-    * ``travis.languages.go`` (``str``) Version of Go being used. Same value as ``TRAVIS_GO_VERSION``.
-    * ``travis.languages.haxe`` (``str``) Version of Haxe being used. Same value as ``TRAVIS_HAXE_VERSION``.
-    * ``travis.languages.jdk`` (``str``) Version of JDK being used. Same value as ``TRAVIS_JDK_VERSION``.
-    * ``travis.languages.julia`` (``str``) Version of Julia being used. Same value as ``TRAVIS_JULIA_VERSION``.
-    * ``travis.languages.node`` (``str``) Version of Node being used. Same value as ``TRAVIS_NODE_VERSION``.
-    * ``travis.languages.otp`` (``str``) Version of OTP being used. Same value as ``TRAVIS_OTP_VERSION``.
-    * ``travis.languages.perl`` (``str``) Version of Perl being used. Same value as ``TRAVIS_PERL_VERSION``.
-    * ``travis.languages.php`` (``str``) Version of PHP being used. Same value as ``TRAVIS_PHP_VERSION``.
-    * ``travis.languages.python`` (``str``) Version of Python being used. Same value as ``TRAVIS_PYTHON_VERSION``.
-    * ``travis.languages.r`` (``str``) Version of R being used. Same value as ``TRAVIS_R_VERSION``.
-    * ``travis.languages.ruby`` (``str``) Version of Ruby being used. Same value as ``TRAVIS_RUBY_VERSION``.
-    * ``travis.languages.rust`` (``str``) Version of Rust being used. Same value as ``TRAVIS_RUST_VERSION``.
-    * ``travis.languages.scala`` (``str``) Version of Scala being used. Same value as ``TRAVIS_SCALA_VERSION``.
+    * ``travis.languages.dart`` (``str``) Version of Dart
+      being used. Same value as ``TRAVIS_DART_VERSION``.
+    * ``travis.languages.go`` (``str``) Version of Go
+      being used. Same value as ``TRAVIS_GO_VERSION``.
+    * ``travis.languages.haxe`` (``str``) Version of Haxe
+      being used. Same value as ``TRAVIS_HAXE_VERSION``.
+    * ``travis.languages.jdk`` (``str``) Version of JDK
+      being used. Same value as ``TRAVIS_JDK_VERSION``.
+    * ``travis.languages.julia`` (``str``) Version of Julia
+      being used. Same value as ``TRAVIS_JULIA_VERSION``.
+    * ``travis.languages.node`` (``str``) Version of Node
+      being used. Same value as ``TRAVIS_NODE_VERSION``.
+    * ``travis.languages.otp`` (``str``) Version of OTP
+      being used. Same value as ``TRAVIS_OTP_VERSION``.
+    * ``travis.languages.perl`` (``str``) Version of Perl
+      being used. Same value as ``TRAVIS_PERL_VERSION``.
+    * ``travis.languages.php`` (``str``) Version of PHP
+      being used. Same value as ``TRAVIS_PHP_VERSION``.
+    * ``travis.languages.python`` (``str``) Version of Python
+      being used. Same value as ``TRAVIS_PYTHON_VERSION``.
+    * ``travis.languages.r`` (``str``) Version of R
+      being used. Same value as ``TRAVIS_R_VERSION``.
+    * ``travis.languages.ruby`` (``str``) Version of Ruby
+      being used. Same value as ``TRAVIS_RUBY_VERSION``.
+    * ``travis.languages.rust`` (``str``) Version of Rust
+      being used. Same value as ``TRAVIS_RUST_VERSION``.
+    * ``travis.languages.scala`` (``str``) Version of Scala
+      being used. Same value as ``TRAVIS_SCALA_VERSION``.
 
     .. note::
-       See the `Travis Documentation for Environment Variables`_ for more information
-
-    .. _Travis Documentation for Environment Variables: https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
+       See the Travis Documentation for Environment Variables
+       for more information
     """
 
     name = "travis"

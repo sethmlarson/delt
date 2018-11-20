@@ -82,7 +82,8 @@ class DeltContext(object):
 
         if "branch" not in params and "pull_request" not in params:
             self.error(
-                "One of the required key(s) 'delt.branch' and 'delt.pull_request' could not be found."
+                "One of the required key(s) 'delt.branch' and "
+                "'delt.pull_request' could not be found."
             )
             return None
 

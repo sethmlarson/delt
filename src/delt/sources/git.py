@@ -10,7 +10,8 @@ class GitSource(DataSource):
     host_regexes = [
         (
             "github",
-            r"^[^\s]+\s+(?:https?|git)://(?:www\.)?github\.com/([^\s/]+)/([^\s/]+?)(?:\.git)?\s+\([^\)]+\)?$",
+            r"^[^\s]+\s+(?:https?|git)://(?:www\.)?github\.com/"
+            r"([^\s/]+)/([^\s/]+?)(?:\.git)?\s+\([^\)]+\)?$",
         )
     ]
 
