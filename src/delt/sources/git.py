@@ -10,7 +10,8 @@ class GitSource(DataSource):
     host_regexes = [
         (
             "github",
-            r"^[^\s]+\s+(?:https?|git)://(?:www\.)?github\.com/([^\s/]+)/([^\s/]+?)(?:\.git)?\s+\([^\)]+\)?$",
+            r"^[^\s]+\s+(?:https?|git)://(?:www\.)?github\.com/"
+            r"([^\s/]+)/([^\s/]+?)(?:\.git)?\s+\([^\)]+\)?$",
         )
     ]
 
@@ -22,23 +23,23 @@ class GitSource(DataSource):
             "git.version": self.context.get_output_from_popen(
                 "git --version", pattern=r"git version ([^\s]+)"
             ),
-            DataSource.DELT_COMMIT: self.context.get_output_from_popen(
+            self.context.DELT_COMMIT: self.context.get_output_from_popen(
                 "git rev-parse HEAD"
             ),
         }
 
         branch = self.context.get_output_from_popen("git rev-parse --abbrev-ref HEAD")
         if branch != "HEAD":
-            obj[DataSource.DELT_BRANCH] = branch
+            obj[self.context.DELT_BRANCH] = branch
 
         unix_timestamp = int(
             self.context.get_output_from_popen(
-                "git show --quiet --format=%%ct %s" % (obj[DataSource.DELT_COMMIT])
+                "git show --quiet --format=%%ct %s" % (obj[self.context.DELT_COMMIT])
             )
         )
-        obj[DataSource.DELT_COMMITTED_AT] = datetime.datetime.utcfromtimestamp(
+        obj[self.context.DELT_COMMITTED_AT] = datetime.datetime.utcfromtimestamp(
             unix_timestamp
-        ).strftime("%Y-%m-%dT%H:%M:%S")
+        ).strftime("%Y-%m-%d %H:%M:%S")
 
         remote = self.context.get_output_from_popen("git remote -v")
 
@@ -49,9 +50,9 @@ class GitSource(DataSource):
                 if match:
                     obj.update(
                         {
-                            DataSource.DELT_PROJECT_HOST: project_host,
-                            DataSource.DELT_PROJECT_OWNER: match.group(1),
-                            DataSource.DELT_PROJECT_NAME: match.group(2),
+                            self.context.DELT_PROJECT_HOST: project_host,
+                            self.context.DELT_PROJECT_OWNER: match.group(1),
+                            self.context.DELT_PROJECT_NAME: match.group(2),
                         }
                     )
                     line = None

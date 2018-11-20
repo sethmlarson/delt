@@ -4,7 +4,6 @@ import subprocess
 import re
 import six
 import colorama
-from delt.sources import DataSource
 from delt.__about__ import __version__
 from delt.utils import compress
 
@@ -26,23 +25,39 @@ RESET_ALL = colorama.Style.RESET_ALL
 
 class DeltContext(object):
 
+    # These values are used for creating request arguments
+    # We group them together so they're near each other
+    # when using --debug
+    DELT_URL = "delt.url"
+    DELT_BRANCH = "delt.branch"
+    DELT_TAG = "delt.tag"
+    DELT_COMMIT = "delt.commit"
+    DELT_COMMITTED_AT = "delt.committed_at"
+    DELT_PULL_REQUEST = "delt.pull_request"
+    DELT_SERVICE = "delt.service"
+    DELT_PROJECT_HOST = "delt.project_host"
+    DELT_PROJECT_OWNER = "delt.project_owner"
+    DELT_PROJECT_NAME = "delt.project_name"
+    DELT_BUILD_ID = "delt.build_id"
+
     request_param_names = {
-        DataSource.DELT_SERVICE,
-        DataSource.DELT_BRANCH,
-        DataSource.DELT_COMMIT,
-        DataSource.DELT_COMMITTED_AT,
-        DataSource.DELT_PULL_REQUEST,
-        DataSource.DELT_URL,
-        DataSource.DELT_TAG,
-        DataSource.DELT_PROJECT_HOST,
-        DataSource.DELT_PROJECT_OWNER,
-        DataSource.DELT_PROJECT_NAME,
+        DELT_SERVICE,
+        DELT_BRANCH,
+        DELT_COMMIT,
+        DELT_COMMITTED_AT,
+        DELT_PULL_REQUEST,
+        DELT_URL,
+        DELT_TAG,
+        DELT_PROJECT_HOST,
+        DELT_PROJECT_OWNER,
+        DELT_PROJECT_NAME,
+        DELT_BUILD_ID,
     }
     optional_param_names = {
-        DataSource.DELT_COMMITTED_AT,
-        DataSource.DELT_PULL_REQUEST,
-        DataSource.DELT_BRANCH,
-        DataSource.DELT_TAG,
+        DELT_COMMITTED_AT,
+        DELT_PULL_REQUEST,
+        DELT_BRANCH,
+        DELT_TAG,
     }
 
     env_path_delimiter = ";" if os.name == "nt" else ":"
@@ -53,14 +68,7 @@ class DeltContext(object):
         self.environ = os.environ.copy()
         self.build_info = {"delt.version": __version__}
 
-        self.pop_from_environ([
-            "LS_COLORS",
-            "PS1",
-            "PS2",
-            "PS3",
-            "PS4",
-            "OLDPWD",
-        ])
+        self.pop_from_environ(["LS_COLORS", "PS1", "PS2", "PS3", "PS4", "OLDPWD"])
 
     def log(self, message, color=WHITE):
         self._output(message, color=color)
@@ -78,7 +86,7 @@ class DeltContext(object):
         marking an environment into request parameters.
         """
         params = {}
-        for key in self.request_param_names:
+        for key in sorted(self.request_param_names):
             value = self.build_info.pop(key, None)
             if value is None and key not in self.optional_param_names:
                 self.error("The required key '%s' could not be found." % key)
@@ -88,7 +96,8 @@ class DeltContext(object):
 
         if "branch" not in params and "pull_request" not in params:
             self.error(
-                "One of the required key(s) 'delt.branch' and 'delt.pull_request' could not be found."
+                "One of the required key(s) 'delt.branch' and "
+                "'delt.pull_request' could not be found."
             )
             return None
 

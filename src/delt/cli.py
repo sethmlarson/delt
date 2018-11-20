@@ -79,6 +79,11 @@ def main(argv):
     debugging.add_argument(
         "--no-upload", action="store_true", help="Don't upload the environment"
     )
+    debugging.add_argument(
+        "--upload-required",
+        action="store_true",
+        help="Error even if uploading fails due to service outage",
+    )
 
     args = parser.parse_args(argv)
     context = DeltContext(args)
@@ -103,11 +108,7 @@ def main(argv):
         context.log("Not uploading environment per the '--no-upload' parameter.")
         return 0
 
-    if upload_environment(context):
-        return 1
-
-    context.log("Successfully uploaded environment! :)", color=GREEN)
-    return 0
+    return upload_environment(context)
 
 
 def discover_build_info(context):
@@ -142,14 +143,14 @@ def discover_build_info(context):
 
 
 def upload_environment(context):
+    params = context.request_params()
+    if params is None:
+        return 1
+
     context.log("Uploading environment...")
 
     # Build the upload URL based on --upload-url and project_slug
     upload_url = urljoin(context.args.upload_url, "upload")
-
-    params = context.request_params()
-    if params is None:
-        return 1
 
     blob = context.request_data()
     headers = {
@@ -176,7 +177,16 @@ def upload_environment(context):
         data=blob,
         params=params,
     ) as r:
-        pass
+
+        if r.status_code == 200:
+            context.log("Successfully uploaded environment! :)", color=GREEN)
+            return 0
+        elif 400 <= r.status_code <= 499:
+            context.error("Error while uploading environment :( %s" % r.json()["error"])
+            return 1
+        else:
+            context.error("Error while uploading environment :( Service outage error")
+            return 1 if context.args.upload_required else 0
 
 
 def entry_point():

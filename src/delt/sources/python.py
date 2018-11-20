@@ -13,8 +13,8 @@ class PythonSource(DataSource):
         for bin_name in ["python", "python3", "pypy"]:
             if self.context.get_returncode_from_popen("%s --version" % bin_name):
                 obj[bin_name + ".version"] = self.context.get_output_from_popen(
-                    "%s -c \"import sys; print('.'.join(str(x) for x in sys.version_info[:3]))\""
-                    % bin_name
+                    "%s -c \"import sys; print('.'.join(str(x) "
+                    'for x in sys.version_info[:3]))"' % bin_name
                 )
                 obj[bin_name + ".impl"] = self.context.get_output_from_popen(
                     '%s -c "import sys; print(sys.implementation.name)"' % bin_name
