@@ -12,7 +12,12 @@ class GitSource(DataSource):
             "github",
             r"^[^\s]+\s+(?:https?|git)://(?:www\.)?github\.com/"
             r"([^\s/]+)/([^\s/]+?)(?:\.git)?\s+\([^\)]+\)?$",
-        )
+        ),
+        (
+            "github",
+            r"^[^\s]+\s+git@github\.com:([^/\s]+)/([^\s/]+?)"
+            r"(?:\.git)?\s+\([^\)]+\)?$",
+        ),
     ]
 
     def is_active(self):

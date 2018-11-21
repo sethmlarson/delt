@@ -1,4 +1,4 @@
-import delt.context
+import delt.context  # noqa
 
 
 class DataSource(object):

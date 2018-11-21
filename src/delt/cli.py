@@ -1,12 +1,18 @@
 import argparse
 import json
 import sys
-import requests
+from urllib3.util import Retry
+import requests.adapters
 from delt.__about__ import __version__
 from delt.context import DeltContext
 from delt.sources import DataSource
 from delt.context import GREEN
 from six.moves.urllib.parse import urljoin
+
+
+class StatusForcelist(object):
+    def __contains__(self, item):
+        return 500 <= item <= 599
 
 
 def main(argv):
@@ -167,7 +173,14 @@ def upload_environment(context):
     context.debug("Build info blob size: %d" % len(blob))
 
     # POST the environment to the upload URL
-    with requests.request(
+    adapter = requests.adapters.HTTPAdapter(
+        max_retries=Retry(
+            total=10, backoff_factor=0.5, status_forcelist=StatusForcelist()
+        )
+    )
+    session = requests.Session()
+    session.mount("https://", adapter)
+    with session.request(
         method="POST",
         url=upload_url,
         headers=headers,
