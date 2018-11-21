@@ -178,11 +178,7 @@ def upload_environment(context):
         url=upload_url,
         headers=headers,
         verify=True,
-        retries=Retry(
-            total=10,
-            backoff_factor=0.5,
-            status_forcelist=StatusForcelist()
-        ),
+        retry=Retry(total=10, backoff_factor=0.5, status_forcelist=StatusForcelist()),
         allow_redirects=False,
         cert=context.args.cert,
         data=blob,
