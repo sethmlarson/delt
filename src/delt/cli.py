@@ -2,7 +2,7 @@ import argparse
 import json
 import sys
 from urllib3.util import Retry
-import requests
+import requests.adapters
 from delt.__about__ import __version__
 from delt.context import DeltContext
 from delt.sources import DataSource
@@ -173,12 +173,18 @@ def upload_environment(context):
     context.debug("Build info blob size: %d" % len(blob))
 
     # POST the environment to the upload URL
-    with requests.request(
+    adapter = requests.adapters.HTTPAdapter(
+        max_retries=Retry(
+            total=10, backoff_factor=0.5, status_forcelist=StatusForcelist()
+        )
+    )
+    session = requests.Session()
+    session.mount("https://", adapter)
+    with session.request(
         method="POST",
         url=upload_url,
         headers=headers,
         verify=True,
-        retry=Retry(total=10, backoff_factor=0.5, status_forcelist=StatusForcelist()),
         allow_redirects=False,
         cert=context.args.cert,
         data=blob,
