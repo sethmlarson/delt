@@ -79,7 +79,8 @@ class TravisSource(DataSource):
             const.BRANCH: self.context.get_from_environ("TRAVIS_BRANCH"),
             const.TAG: self.context.get_from_environ("TRAVIS_TAG"),
             const.SERVICE: "travis",
-            const.BUILD_ID: "travis%s" % (self.context.get_from_environ("TRAVIS_JOB_NUMBER")),
+            const.BUILD_ID: "travis%s"
+            % (self.context.get_from_environ("TRAVIS_JOB_NUMBER")),
         }
         travis = {
             "allow_failure": self.context.get_from_environ(

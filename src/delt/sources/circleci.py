@@ -17,7 +17,7 @@ class CircleCISource(DataSource):
             const.SERVICE: "circleci",
             const.BRANCH: self.context.get_from_environ("CIRCLE_BRANCH"),
             const.BUILD_ID: "circleci%s"
-                            % (self.context.get_from_environ("CIRCLE_BUILD_NUM")),
+            % (self.context.get_from_environ("CIRCLE_BUILD_NUM")),
             const.TAG: self.context.get_from_environ("CIRCLE_TAG"),
             const.COMMIT: self.context.get_from_environ("CIRCLE_SHA1"),
             const.PROJECT_OWNER: self.context.get_from_environ(
