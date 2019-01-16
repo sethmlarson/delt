@@ -156,6 +156,7 @@ class DeltContext(object):
         of the program. Optionally runs a regex on the output.
         """
         self.debug("Examining output of command %r" % argv)
+
         kwargs = {"stdout": subprocess.PIPE}
         if stderr:
             kwargs["stderr"] = subprocess.STDOUT
@@ -163,6 +164,7 @@ class DeltContext(object):
             kwargs["stderr"] = DEVNULL
         if shell:
             kwargs["shell"] = True
+
         proc = subprocess.Popen(argv, **kwargs)
         data = b""
         while proc.poll() is None:
@@ -180,9 +182,12 @@ class DeltContext(object):
                 self.error("Unexpected output from command %r" % argv)
                 data = None
 
+        if data:
+            data = data.strip()
+
         self.debug(data)
 
-        return data.strip()
+        return data
 
     def get_returncode_from_popen(self, argv, shell=True):
         """Returns 'True' if the program runs with a
