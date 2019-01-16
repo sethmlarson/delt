@@ -103,10 +103,6 @@ def main(argv):
 def discover_build_info(context):
     context.log("Discovering project and build info...")
 
-    # Override project slug if given
-    if context.args.project_slug:
-        context.project_slug = context.args.project_slug
-
     # Take the options given to us via argv over any auto-detection
     for name in ["service", "branch", "commit", "pull_request", "tag", "build_url"]:
         value = getattr(context.args, name)
