@@ -16,7 +16,7 @@ except ImportError:
 
 def merge_dict(old, new):
     for name, value in six.iteritems(new):
-        if name in old:
+        if name in old and old[name] != value:
             if isinstance(old[name], dict) and isinstance(value, dict):
                 old[name] = merge_dict(old[name], value)
             else:
