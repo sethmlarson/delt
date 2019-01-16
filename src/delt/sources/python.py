@@ -35,12 +35,4 @@ class PythonSource(DataSource):
         ):
             obj.pop("python3", None)
 
-        # Put virtualenv path here instead of in 'env'
-        virtualenv = self.context.get_from_environ("VIRTUAL_ENV", default=None)
-        if virtualenv:
-            obj.setdefault("python", {})
-            obj["python"]["virtualenv"] = virtualenv
-            self.context.pop_from_environ(["VIRTUAL_ENV"])
-        self.context.pop_from_environ("VIRTUAL_ENV")
-
         return obj

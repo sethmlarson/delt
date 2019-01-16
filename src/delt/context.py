@@ -60,12 +60,12 @@ class DeltContext(object):
         self._output(message, color=color)
 
     def error(self, message):
-        self._output("X> " + message, color=RED)
+        self._output("X> " + str(message), color=RED)
 
     def debug(self, message):
         if not self.args.debug:
             return
-        self._output("-> " + message, color=GREY)
+        self._output("-> " + str(message), color=GREY)
 
     def request_params(self):
         """Pop all build information that are used for
@@ -149,11 +149,14 @@ class DeltContext(object):
         for name in names:
             self.environ.pop(name, None)
 
-    def get_output_from_popen(self, argv, shell=True, stderr=False, pattern=None):
+    def get_output_from_popen(
+        self, argv, shell=True, stderr=False, pattern=None, allow_no_match=False
+    ):
         """Runs a program and gets the stdout and optionally stderr
         of the program. Optionally runs a regex on the output.
         """
         self.debug("Examining output of command %r" % argv)
+
         kwargs = {"stdout": subprocess.PIPE}
         if stderr:
             kwargs["stderr"] = subprocess.STDOUT
@@ -161,6 +164,7 @@ class DeltContext(object):
             kwargs["stderr"] = DEVNULL
         if shell:
             kwargs["shell"] = True
+
         proc = subprocess.Popen(argv, **kwargs)
         data = b""
         while proc.poll() is None:
@@ -169,11 +173,21 @@ class DeltContext(object):
         data = data.decode("utf-8").strip()
 
         if pattern is not None:
-            data = re.search(pattern, data).group(1)
+            match = re.search(pattern, data)
+            if match is not None:
+                data = match.group(1)
+            elif allow_no_match:
+                data = None
+            else:
+                self.error("Unexpected output from command %r" % argv)
+                data = None
+
+        if data:
+            data = data.strip()
 
         self.debug(data)
 
-        return data.strip()
+        return data
 
     def get_returncode_from_popen(self, argv, shell=True):
         """Returns 'True' if the program runs with a
