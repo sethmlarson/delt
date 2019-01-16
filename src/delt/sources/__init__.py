@@ -12,6 +12,8 @@ from .rubygems import RubyGemsSource
 from .operating_system import OperatingSystemSource
 from .git import GitSource
 from .conda import CondaSource
+from .virtualenv import VirtualenvSource
+from .gitlab_ci import GitLabCISource
 
 __all__ = [
     "DataSource",
@@ -28,4 +30,6 @@ __all__ = [
     "OperatingSystemSource",
     "GitSource",
     "CondaSource",
+    "VirtualenvSource",
+    "GitLabCISource",
 ]

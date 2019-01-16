@@ -15,3 +15,5 @@ Unreleased (master)
 * Added support for Ruby and RubyGems
 * Added support for CircleCI
 * Added support for Conda
+* Added support for Virtualenv
+* Added support for GitLab CI and GitLab Runner

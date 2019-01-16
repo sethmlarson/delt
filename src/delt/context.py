@@ -149,7 +149,9 @@ class DeltContext(object):
         for name in names:
             self.environ.pop(name, None)
 
-    def get_output_from_popen(self, argv, shell=True, stderr=False, pattern=None):
+    def get_output_from_popen(
+        self, argv, shell=True, stderr=False, pattern=None, allow_no_match=False
+    ):
         """Runs a program and gets the stdout and optionally stderr
         of the program. Optionally runs a regex on the output.
         """
@@ -169,7 +171,14 @@ class DeltContext(object):
         data = data.decode("utf-8").strip()
 
         if pattern is not None:
-            data = re.search(pattern, data).group(1)
+            match = re.search(pattern, data)
+            if match is not None:
+                data = match.group(1)
+            elif allow_no_match:
+                data = None
+            else:
+                self.error("Unexpected output from command %r" % argv)
+                data = None
 
         self.debug(data)
 
