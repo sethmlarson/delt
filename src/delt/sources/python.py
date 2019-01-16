@@ -1,4 +1,5 @@
 from ._base import DataSource
+import os.path
 
 
 class PythonSource(DataSource):
@@ -12,17 +13,33 @@ class PythonSource(DataSource):
         obj = {}
         for bin_name in ["python", "python3", "pypy"]:
             if self.context.get_returncode_from_popen("%s --version" % bin_name):
-                obj[bin_name + ".version"] = self.context.get_output_from_popen(
-                    "%s -c \"import sys; print('.'.join(str(x) "
-                    'for x in sys.version_info[:3]))"' % bin_name
-                )
-                obj[bin_name + ".impl"] = self.context.get_output_from_popen(
-                    '%s -c "import sys; print(sys.implementation.name)"' % bin_name
-                )
+                obj[bin_name] = {
+                    "version": self.context.get_output_from_popen(
+                        "%s -c \"import sys; print('.'.join(str(x) "
+                        'for x in sys.version_info[:3]))"' % bin_name
+                    ),
+                    "implementation": self.context.get_output_from_popen(
+                        '%s -c "import sys; print(sys.implementation.name)"' % bin_name
+                    ),
+                    "executable": self.context.get_output_from_popen(
+                        '%s -c "import sys; print(sys.executable)' % bin_name
+                    ),
+                }
 
+        # Remove duplication if 'python' and 'python3' are the same.
+        if (
+            "python" in obj
+            and "python3" in obj
+            and os.path.realpath(obj["python"]["executable"])
+            == os.path.realpath(obj["python3"]["executable"])
+        ):
+            obj.pop("python3", None)
+
+        # Put virtualenv path here instead of in 'env'
         virtualenv = self.context.get_from_environ("VIRTUAL_ENV", default=None)
         if virtualenv:
-            obj["python.virtualenv"] = virtualenv
+            obj["virtualenv"] = virtualenv
             self.context.pop_from_environ(["VIRTUAL_ENV"])
+        self.context.pop_from_environ("VIRTUAL_ENV")
 
         return obj

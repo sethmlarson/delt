@@ -21,8 +21,10 @@ class AptSource(DataSource):
                 packages[match.group(1)] = match.group(2)
 
         return {
-            "apt.version": self.context.get_output_from_popen(
-                "apt --version", pattern=r"\s+([\d\.]+)\s+"
-            ),
-            "apt.packages": packages,
+            "apt": {
+                "version": self.context.get_output_from_popen(
+                    "apt --version", pattern=r"\s+([\d\.]+)\s+"
+                ),
+                "packages": packages,
+            }
         }

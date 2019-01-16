@@ -27,21 +27,29 @@ def test_travis_context():
 
     assert source.is_active() is True
     assert source.get_values() == {
-        "delt.project_owner": "delt-io",
-        "delt.project_name": "delt",
-        "delt.pull_request": 1,
-        "delt.commit": "abcdef",
-        "delt.branch": "master",
-        "delt.build_id": "travis1.1",
-        "delt.tag": None,
-        "delt.service": "travis",
-        "delt.url": "https://travis-ci.org/delt-io/delt/jobs/457146029",
-        "travis.allow_failure": False,
-        "travis.build_stage": "stage1",
-        "travis.dist": "trusty",
-        "travis.infra": "ec2",
-        "travis.os_name": "linux",
-        "travis.python.version": "3.6",
-        "travis.secure_env_vars": False,
-        "travis.sudo": True,
+        "build": {
+            "project_owner": "delt-io",
+            "project_name": "delt",
+            "pull_request": 1,
+            "commit": "abcdef",
+            "branch": "master",
+            "id": "travis1.1",
+            "tag": None,
+            "service": "travis",
+            "url": "https://travis-ci.org/delt-io/delt/jobs/457146029",
+        },
+        "travis": {
+            "allow_failure": False,
+            "build_stage": "stage1",
+            "dist": "trusty",
+            "infra": "ec2",
+            "os_name": "linux",
+            "python": {
+                "version": "3.6",
+            },
+            "secure_env_vars": False,
+            "sudo": True,
+        }
     }
+
+    assert "TRAVIS" not in context.environ

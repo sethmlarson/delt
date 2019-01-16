@@ -1,4 +1,5 @@
 from ._base import DataSource
+from delt import const
 
 
 class TravisSource(DataSource):
@@ -70,43 +71,40 @@ class TravisSource(DataSource):
             self.context.get_from_environ("TRAVIS_REPO_SLUG")
         )
 
-        obj = {
-            self.context.DELT_URL: self.context.get_from_environ("TRAVIS_JOB_WEB_URL"),
-            self.context.DELT_PROJECT_OWNER: project_owner,
-            self.context.DELT_PROJECT_NAME: project_name,
-            self.context.DELT_COMMIT: self.context.get_from_environ("TRAVIS_COMMIT"),
-            self.context.DELT_BRANCH: self.context.get_from_environ("TRAVIS_BRANCH"),
-            self.context.DELT_TAG: self.context.get_from_environ("TRAVIS_TAG"),
-            self.context.DELT_SERVICE: "travis",
-            self.context.DELT_BUILD_ID: "travis%s"
-            % (self.context.get_from_environ("TRAVIS_JOB_NUMBER")),
-            "travis.allow_failure": self.context.get_from_environ(
+        build = {
+            const.URL: self.context.get_from_environ("TRAVIS_JOB_WEB_URL"),
+            const.PROJECT_OWNER: project_owner,
+            const.PROJECT_NAME: project_name,
+            const.COMMIT: self.context.get_from_environ("TRAVIS_COMMIT"),
+            const.BRANCH: self.context.get_from_environ("TRAVIS_BRANCH"),
+            const.TAG: self.context.get_from_environ("TRAVIS_TAG"),
+            const.SERVICE: "travis",
+            const.ID: "travis%s" % (self.context.get_from_environ("TRAVIS_JOB_NUMBER")),
+        }
+        travis = {
+            "allow_failure": self.context.get_from_environ(
                 "TRAVIS_ALLOW_FAILURE", convert_bools=True
             ),
-            "travis.secure_env_vars": self.context.get_from_environ(
+            "secure_env_vars": self.context.get_from_environ(
                 "TRAVIS_SECURE_ENV_VARS", convert_bools=True
             ),
-            "travis.sudo": self.context.get_from_environ(
-                "TRAVIS_SUDO", convert_bools=True
-            ),
-            "travis.build_stage": self.context.get_from_environ(
-                "TRAVIS_BUILD_STAGE_NAME"
-            ),
-            "travis.os_name": self.context.get_from_environ("TRAVIS_OS_NAME"),
-            "travis.dist": self.context.get_from_environ(
+            "sudo": self.context.get_from_environ("TRAVIS_SUDO", convert_bools=True),
+            "build_stage": self.context.get_from_environ("TRAVIS_BUILD_STAGE_NAME"),
+            "os_name": self.context.get_from_environ("TRAVIS_OS_NAME"),
+            "dist": self.context.get_from_environ(
                 "TRAVIS_DIST", normalizer=lambda x: x if x != "notset" else None
             ),
-            "travis.infra": self.context.get_from_environ("TRAVIS_INFRA"),
+            "infra": self.context.get_from_environ("TRAVIS_INFRA"),
         }
 
         if self.context.get_from_environ("TRAVIS_OS_NAME") == "macos":
-            obj["travis.osx_image"] = self.context.get_from_environ("TRAVIS_OSX_IMAGE")
+            travis["osx_image"] = self.context.get_from_environ("TRAVIS_OSX_IMAGE")
 
         pull_request_number = self.context.get_from_environ(
             "TRAVIS_PULL_REQUEST", normalizer=lambda x: int(x) if x != "false" else None
         )
         if pull_request_number:
-            obj[self.context.DELT_PULL_REQUEST] = pull_request_number
+            build[const.PULL_REQUEST] = pull_request_number
 
         for lang in [
             "dart",
@@ -126,13 +124,11 @@ class TravisSource(DataSource):
         ]:
             env_name = "TRAVIS_%s_VERSION" % lang.upper()
             if env_name in self.context.environ:
-                obj["travis.%s.version" % lang] = self.context.get_from_environ(
-                    env_name
-                )
+                travis[lang] = {"version": self.context.get_from_environ(env_name)}
 
         if "TRAVIS_XCODE_SDK" in self.context.environ:
-            obj["travis.xcode_sdk"] = self.context.get_from_environ("TRAVIS_XCODE_SDK")
-            obj["travis.xcode_scheme"] = self.context.get_from_environ(
+            travis["xcode_sdk"] = self.context.get_from_environ("TRAVIS_XCODE_SDK")
+            travis["xcode_scheme"] = self.context.get_from_environ(
                 "TRAVIS_XCODE_SCHEME"
             )
 
@@ -159,7 +155,7 @@ class TravisSource(DataSource):
             [x for x in self.context.environ if x.startswith("TRAVIS_")]
         )
 
-        return obj
+        return {"travis": travis, "build": build}
 
     @staticmethod
     def _split_project_slug(slug):

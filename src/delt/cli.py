@@ -18,26 +18,9 @@ class StatusForcelist(object):
 def main(argv):
     parser = argparse.ArgumentParser(prog="delt")
 
-    build_info = parser.add_argument_group("Build Info")
+    build_info = parser.add_argument_group("build info")
     build_info.add_argument(
         "-X", "--disable", nargs="*", help="Names of environment sources to disable"
-    )
-    build_info.add_argument(
-        "--project-slug", help="Project host, owner, and name delimited by '/'"
-    )
-    build_info.add_argument(
-        "--service", help="Specify the CI service being used for the current build"
-    )
-    build_info.add_argument("--branch", help="Specify the branch for the current build")
-    build_info.add_argument(
-        "--commit", help="Specify the commit SHA1 for the current build"
-    )
-    build_info.add_argument(
-        "--pull-request",
-        help="Specify the pull request number for the current build if any",
-    )
-    build_info.add_argument(
-        "--tag", help="Specify the tag for the current build if any"
     )
     build_info.add_argument(
         "--include-env",
@@ -52,7 +35,7 @@ def main(argv):
         help="List of environment variable names to exclude that would otherwise be included",
     )
 
-    private_enterprise = parser.add_argument_group("Private/Enterprise")
+    private_enterprise = parser.add_argument_group("private / enterprise")
     private_enterprise.add_argument(
         "--token", help="Authorization token for private projects"
     )
@@ -66,7 +49,7 @@ def main(argv):
         "--cert", help="Path to a certificate to use for HTTPS"
     )
 
-    debugging = parser.add_argument_group("Debugging")
+    debugging = parser.add_argument_group("debugging")
     debugging.add_argument(
         "-v",
         "--version",
@@ -166,7 +149,7 @@ def upload_environment(context):
         "Content-Length": str(len(blob)),
     }
 
-    # If it's a private repository we have to use
+    # If it's a private repository we have to use a token to authenticate
     if context.args.token:
         context["Authorization"] = "Bearer %s" % context.args.token
 
