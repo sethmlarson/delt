@@ -37,7 +37,7 @@ class DeltContext(object):
         const.PROJECT_HOST,
         const.PROJECT_OWNER,
         const.PROJECT_NAME,
-        const.ID,
+        const.BUILD_ID,
     }
     optional_param_names = {
         const.COMMITTED_AT,
@@ -73,7 +73,7 @@ class DeltContext(object):
         """
         params = {}
         for key in sorted(self.request_param_names):
-            value = self.build_info["build"].pop(key, None)
+            value = self.build_info["build"].get(key)
             if value is None and key not in self.optional_param_names:
                 self.error("The required key '%s' could not be found." % key)
                 return None

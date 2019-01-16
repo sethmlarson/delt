@@ -33,7 +33,7 @@ def test_travis_context():
             "pull_request": 1,
             "commit": "abcdef",
             "branch": "master",
-            "id": "travis1.1",
+            "build_id": "travis1.1",
             "tag": None,
             "service": "travis",
             "url": "https://travis-ci.org/delt-io/delt/jobs/457146029",
