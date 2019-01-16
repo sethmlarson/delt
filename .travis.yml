@@ -27,7 +27,7 @@ matrix:
     - python: 3.7
       env: TOXENV=py37
       sudo: required
-      dist: trusty
+      dist: xenial
 
 install:
   - python -m pip install -U tox
