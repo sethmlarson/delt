@@ -103,12 +103,6 @@ def main(argv):
 def discover_build_info(context):
     context.log("Discovering project and build info...")
 
-    # Take the options given to us via argv over any auto-detection
-    for name in ["service", "branch", "commit", "pull_request", "tag", "build_url"]:
-        value = getattr(context.args, name)
-        if value:
-            context.build_info[name] = value
-
     for cls in sorted(
         DataSource.__subclasses__(), key=lambda cls: (cls.priority, cls.name)
     ):
