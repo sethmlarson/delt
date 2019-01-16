@@ -60,12 +60,12 @@ class DeltContext(object):
         self._output(message, color=color)
 
     def error(self, message):
-        self._output("X> " + message, color=RED)
+        self._output("X> " + str(message), color=RED)
 
     def debug(self, message):
         if not self.args.debug:
             return
-        self._output("-> " + message, color=GREY)
+        self._output("-> " + str(message), color=GREY)
 
     def request_params(self):
         """Pop all build information that are used for
