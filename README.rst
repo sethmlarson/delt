@@ -6,11 +6,11 @@ Is this your current implementation of "debugging" your build environment?
 .. code-block:: yaml
 
     before_script:
-        - python --version
-        - pip --version
-        - pip freeze
-        - apt list
-        - openssl version
+      - python --version
+      - pip --version
+      - pip freeze
+      - apt list
+      - openssl version
 
 * Requires manual effort determine differences between builds.
 * Requires parsing unstructured information in plain-text.

@@ -1,4 +1,5 @@
 from ._base import DataSource
+from delt import const
 
 
 class CircleCISource(DataSource):
@@ -12,22 +13,24 @@ class CircleCISource(DataSource):
         )
 
     def get_values(self):
-        obj = {
-            self.context.DELT_SERVICE: "circleci",
-            self.context.DELT_BRANCH: self.context.get_from_environ("CIRCLE_BRANCH"),
-            self.context.DELT_BUILD_ID: "circleci%s"
+        build = {
+            const.SERVICE: "circleci",
+            const.BRANCH: self.context.get_from_environ("CIRCLE_BRANCH"),
+            const.BUILD_ID: "circleci%s"
             % (self.context.get_from_environ("CIRCLE_BUILD_NUM")),
-            self.context.DELT_TAG: self.context.get_from_environ("CIRCLE_TAG"),
-            self.context.DELT_COMMIT: self.context.get_from_environ("CIRCLE_SHA1"),
-            self.context.DELT_PROJECT_OWNER: self.context.get_from_environ(
+            const.TAG: self.context.get_from_environ("CIRCLE_TAG"),
+            const.COMMIT: self.context.get_from_environ("CIRCLE_SHA1"),
+            const.PROJECT_OWNER: self.context.get_from_environ(
                 "CIRCLE_PROJECT_USERNAME"
             ),
-            self.context.DELT_PROJECT_NAME: self.context.get_from_environ(
+            const.PROJECT_NAME: self.context.get_from_environ(
                 "CIRCLE_PROJECT_REPONAME"
             ),
-            self.context.DELT_URL: self.context.get_from_environ("CIRCLE_BUILD_URL"),
-            "circleci.job_name": self.context.get_from_environ("CIRCLE_JOB"),
-            "circleci.workflow_id": self.context.get_from_environ("CIRCLE_WORKFLOW_ID"),
+            const.URL: self.context.get_from_environ("CIRCLE_BUILD_URL"),
+        }
+        circleci = {
+            "job_name": self.context.get_from_environ("CIRCLE_JOB"),
+            "workflow_id": self.context.get_from_environ("CIRCLE_WORKFLOW_ID"),
         }
 
         # We do the weird splitting below because the environment variable
@@ -36,7 +39,7 @@ class CircleCISource(DataSource):
             ["CIRCLE_PULL_REQUEST", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
         )
         if pull_request and pull_request.split("/")[-1].isdigit():
-            obj[self.context.DELT_PULL_REQUEST] = int(pull_request.split("/")[-1])
+            build["pull_request"] = int(pull_request.split("/")[-1])
 
         self.context.pop_from_environ(
             ["CI", "CIRCLECI", "PYTHON_VERSION", "PYTHON_PIP_VERSION"]
@@ -49,4 +52,4 @@ class CircleCISource(DataSource):
             ]
         )
 
-        return obj
+        return {"build": build, "circleci": circleci}

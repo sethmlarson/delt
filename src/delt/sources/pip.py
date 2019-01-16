@@ -21,8 +21,10 @@ class PipSource(DataSource):
             if match:
                 packages[match.group(1)] = match.group(2)
         return {
-            "pip.version": self.context.get_output_from_popen(
-                "pip --version", pattern=r"\s+([\d\.]+)\s+"
-            ),
-            "pip.packages": packages,
+            "pip": {
+                "version": self.context.get_output_from_popen(
+                    "pip --version", pattern=r"\s+([\d\.]+)\s+"
+                ),
+                "packages": packages,
+            }
         }

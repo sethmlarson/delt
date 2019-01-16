@@ -23,8 +23,10 @@ class BrewSource(DataSource):
                 packages[match.group(1)] = match.group(2)
 
         return {
-            "brew.version": self.context.get_output_from_popen(
-                "brew --version", pattern=r"\s+([\d\.]+)\s+"
-            ),
-            "brew.packages": packages,
+            "brew": {
+                "version": self.context.get_output_from_popen(
+                    "brew --version", pattern=r"\s+([\d\.]+)\s+"
+                ),
+                "packages": packages,
+            }
         }

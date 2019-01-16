@@ -10,7 +10,8 @@ Unreleased (master)
 * Added support for Travis
 * Added support for Python, Pip, and Pyenv
 * Added support for Aptitude
-* Added support for Linux operating systems
+* Added support for Windows, macOS, and Linux operating systems
 * Added support for Brew
 * Added support for Ruby and RubyGems
 * Added support for CircleCI
+* Added support for Conda

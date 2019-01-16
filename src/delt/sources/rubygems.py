@@ -19,8 +19,10 @@ class RubyGemsSource(DataSource):
             if match:
                 packages[match.group(1)] = match.group(2)
         return {
-            "rubygems.version": self.context.get_output_from_popen(
-                "gem --version", pattern=r"([\d\.]+)"
-            ),
-            "rubygems.packages": packages,
+            "rubygems": {
+                "version": self.context.get_output_from_popen(
+                    "gem --version", pattern=r"([\d\.]+)"
+                ),
+                "packages": packages,
+            }
         }

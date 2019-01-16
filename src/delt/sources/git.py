@@ -1,6 +1,7 @@
 import datetime
 import re
 from ._base import DataSource
+from delt import const
 
 
 class GitSource(DataSource):
@@ -24,40 +25,38 @@ class GitSource(DataSource):
         return self.context.get_returncode_from_popen("git --version")
 
     def get_values(self):
-        obj = {
-            "git.version": self.context.get_output_from_popen(
+        git = {
+            "version": self.context.get_output_from_popen(
                 "git --version", pattern=r"git version ([^\s]+)"
-            ),
-            self.context.DELT_COMMIT: self.context.get_output_from_popen(
-                "git rev-parse HEAD"
-            ),
+            )
         }
+        build = {const.COMMIT: self.context.get_output_from_popen("git rev-parse HEAD")}
 
         branch = self.context.get_output_from_popen("git rev-parse --abbrev-ref HEAD")
         if branch != "HEAD":
-            obj[self.context.DELT_BRANCH] = branch
+            build[const.BRANCH] = branch
 
         unix_timestamp = int(
             self.context.get_output_from_popen(
-                "git show --quiet --format=%%ct %s" % (obj[self.context.DELT_COMMIT])
+                "git show --quiet --format=%%ct %s" % (build[const.COMMIT])
             )
         )
-        obj[self.context.DELT_COMMITTED_AT] = datetime.datetime.utcfromtimestamp(
+        build[const.COMMITTED_AT] = datetime.datetime.utcfromtimestamp(
             unix_timestamp
         ).strftime("%Y-%m-%d %H:%M:%S")
 
-        remote = self.context.get_output_from_popen("git remote -v")
+        remotes = self.context.get_output_from_popen("git remote -v")
 
-        for line in remote.split("\n"):
+        for line in remotes.split("\n"):
             line = line.strip()
             for project_host, pattern in self.host_regexes:
                 match = re.match(pattern, line)
                 if match:
-                    obj.update(
+                    build.update(
                         {
-                            self.context.DELT_PROJECT_HOST: project_host,
-                            self.context.DELT_PROJECT_OWNER: match.group(1),
-                            self.context.DELT_PROJECT_NAME: match.group(2),
+                            const.PROJECT_HOST: project_host,
+                            const.PROJECT_OWNER: match.group(1),
+                            const.PROJECT_NAME: match.group(2),
                         }
                     )
                     line = None
@@ -66,4 +65,4 @@ class GitSource(DataSource):
             if line is None:
                 break
 
-        return obj
+        return {"build": build, "git": git}

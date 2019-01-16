@@ -11,6 +11,7 @@ from .ruby import RubySource
 from .rubygems import RubyGemsSource
 from .operating_system import OperatingSystemSource
 from .git import GitSource
+from .conda import CondaSource
 
 __all__ = [
     "DataSource",
@@ -26,4 +27,5 @@ __all__ = [
     "RubyGemsSource",
     "OperatingSystemSource",
     "GitSource",
+    "CondaSource",
 ]
