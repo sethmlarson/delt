@@ -1,9 +1,9 @@
 from ._base import DataSource
+from .. import const
 
 
 class VirtualenvSource(DataSource):
     name = "virtualenv"
-    priority = DataSource.PRI_UTIL
 
     def is_active(self):
         return (

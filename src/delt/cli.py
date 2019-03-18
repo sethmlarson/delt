@@ -101,7 +101,7 @@ def main(argv):
 
 
 def discover_build_info(context):
-    context.log("Discovering project and build info...")
+    context.log("Disc  overing project and build info...")
 
     for cls in sorted(
         DataSource.__subclasses__(), key=lambda cls: (cls.priority, cls.name)

@@ -4,7 +4,6 @@ from ._base import DataSource
 
 class BrewSource(DataSource):
     name = "brew"
-    priority = DataSource.PRI_PM
 
     brew_list_regex = re.compile(r"^([^\s]+)\s+([^\s]+)$")
 

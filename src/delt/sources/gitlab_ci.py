@@ -4,7 +4,7 @@ from delt import const
 
 class GitLabCISource(DataSource):
     name = "gitlab_ci"
-    priority = DataSource.PRI_CI
+    priority = const.PRIORITY_SERVICE
 
     def is_active(self):
         return "GITLAB_CI" in self.context.environ
@@ -15,7 +15,7 @@ class GitLabCISource(DataSource):
         build = {
             const.SERVICE: "gitlab_ci",
             const.URL: self.context.get_from_environ(["CI_JOB_URL", "CI_BUILD_URL"]),
-            const.BUILD_ID: "gitlab_ci%s"
+            const.BUILD_ID: "gitlab-ci-%s"
             % self.context.get_from_environ(["CI_JOB_ID", "CI_BUILD_ID"]),
             const.COMMIT: self.context.get_from_environ(
                 ["CI_COMMIT_SHA", "CI_BUILD_REF"]

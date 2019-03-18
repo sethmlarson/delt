@@ -6,7 +6,7 @@ from delt import const
 
 class GitSource(DataSource):
     name = "git"
-    priority = DataSource.PRI_VCS
+    priority = const.PRIORITY_PROJECT
 
     host_regexes = [
         (

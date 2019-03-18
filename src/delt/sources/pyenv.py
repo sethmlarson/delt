@@ -4,7 +4,6 @@ from ._base import DataSource
 
 class PyenvSource(DataSource):
     name = "pyenv"
-    priority = DataSource.PRI_UTIL
 
     version_regex = re.compile(r"^(\s{2}|\*\s)([^\s]+)")
 

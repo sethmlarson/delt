@@ -4,7 +4,6 @@ import os.path
 
 class PythonSource(DataSource):
     name = "python"
-    priority = DataSource.PRI_LANG
 
     def is_active(self):
         return self.context.get_returncode_from_popen("python --version")
