@@ -27,12 +27,12 @@ matrix:
       sudo: required
       dist: xenial
 
-install:
-  - python -m pip install -U tox
-
 before_install:
   - python setup.py install
   - delt --debug
+
+install:
+  - python -m pip install -U tox
 
 script:
   - tox
