@@ -9,7 +9,7 @@ environment:
       TOXENV: "py37"
 
 cache:
-  - "C:\Users\appveyor\AppData\Local\pip\cache"
+  - "C:\\Users\\appveyor\\AppData\\Local\\pip\\cache"
 
 install:
   - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
