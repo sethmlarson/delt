@@ -36,11 +36,9 @@ class AppVeyorSource(DataSource):
         appveyor_account_name = self.context.get_from_environ("APPVEYOR_ACCOUNT_NAME")
         appveyor_project_name = self.context.get_from_environ("APPVEYOR_PROJECT_NAME")
         if appveyor_account_name and appveyor_project_name and build_id and job_id:
-            build[const.URL] = "https://ci.appveyor.com/%s/%s/build/%s/job/%s" % (
-                appveyor_account_name,
-                appveyor_project_name,
-                build_id,
-                job_id,
+            build[const.URL] = (
+                "https://ci.appveyor.com/project/%s/%s/builds/%s/job/%s"
+                % (appveyor_account_name, appveyor_project_name, build_id, job_id)
             )
 
         appveyor = {
