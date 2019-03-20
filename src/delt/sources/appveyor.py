@@ -25,15 +25,21 @@ class AppVeyorSource(DataSource):
             const.BRANCH: self.context.get_from_environ("APPVEYOR_REPO_BRANCH"),
             const.TAG: self.context.get_from_environ("APPVEYOR_REPO_TAG_NAME"),
             const.SERVICE: "appveyor",
-            const.BUILD_ID: "appveyor-%s-%s" % (build_number, job_number),
+            const.BUILD_ID: "appveyor-%s.%s" % (build_number, job_number),
         }
 
         build_id = self.context.get_from_environ("APPVEYOR_BUILD_ID")
         job_id = self.context.get_from_environ("APPVEYOR_JOB_ID")
-        if project_owner and project_name and build_id and job_id:
+
+        # AppVeyor does this weird thing where the project owner
+        # isn't necessarily the same owner as the CI project
+        appveyor_project_owner, appveyor_project_name = utils.split_project_slug(
+            self.context.get_from_environ("APPVEYOR_PROJECT_SLUG")
+        )
+        if appveyor_project_owner and appveyor_project_name and build_id and job_id:
             build[const.URL] = "https://ci.appveyor.com/%s/%s/build/%s/job/%s" % (
-                project_owner,
-                project_name,
+                appveyor_project_owner,
+                appveyor_project_name,
                 build_id,
                 job_id,
             )
