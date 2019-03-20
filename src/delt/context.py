@@ -56,6 +56,10 @@ class DeltContext(object):
 
         self.pop_from_environ(["LS_COLORS", "PS1", "PS2", "PS3", "PS4", "OLDPWD"])
 
+        self.debug("Initial environment variables are:")
+        for name, value in sorted(self.environ.items()):
+            self.debug("%s=%s" % (name, value))
+
     def log(self, message, color=WHITE):
         self._output(message, color=color)
 
