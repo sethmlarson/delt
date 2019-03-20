@@ -4,7 +4,7 @@ from delt import const
 
 class CircleCISource(DataSource):
     name = "circleci"
-    priority = DataSource.PRI_CI
+    priority = const.PRIORITY_SERVICE
 
     def is_active(self):
         return (
@@ -16,7 +16,7 @@ class CircleCISource(DataSource):
         build = {
             const.SERVICE: "circleci",
             const.BRANCH: self.context.get_from_environ("CIRCLE_BRANCH"),
-            const.BUILD_ID: "circleci%s"
+            const.BUILD_ID: "circleci-%s"
             % (self.context.get_from_environ("CIRCLE_BUILD_NUM")),
             const.TAG: self.context.get_from_environ("CIRCLE_TAG"),
             const.COMMIT: self.context.get_from_environ("CIRCLE_SHA1"),

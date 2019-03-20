@@ -3,7 +3,6 @@ from ._base import DataSource
 
 class VirtualenvSource(DataSource):
     name = "virtualenv"
-    priority = DataSource.PRI_UTIL
 
     def is_active(self):
         return (

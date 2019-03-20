@@ -10,7 +10,6 @@ except ImportError:
 
 class OperatingSystemSource(DataSource):
     name = "os"
-    priority = DataSource.PRI_SYS
 
     def is_active(self):
         return True

@@ -17,3 +17,4 @@ Unreleased (master)
 * Added support for Conda
 * Added support for Virtualenv
 * Added support for GitLab CI and GitLab Runner
+* Added support for AppVeyor

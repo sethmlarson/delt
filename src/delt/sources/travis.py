@@ -1,64 +1,10 @@
 from ._base import DataSource
-from delt import const
+from delt import const, utils
 
 
 class TravisSource(DataSource):
-    """
-    The following values are gathered for Travis environments:
-
-    * ``travis.allow_failure`` (``bool``) Same value as ``TRAVIS_ALLOW_FAILURE``
-    * ``travis.secure_env_vars`` (``bool``) Same value as ``TRAVIS_SECURE_ENV_VARS``
-    * ``travis.build_stage`` (``str``) Same value as ``TRAVIS_BUILD_STAGE_NAME``
-    * ``travis.os_name`` (``str``) Same value as ``TRAVIS_OS_NAME``
-    * ``travis.dist`` (``str``) Same value as ``TRAVIS_DIST``
-    * ``travis.infra`` (``str``) Same value as ``TRAVIS_INFRA``
-
-    .. note::
-       The following values are only gathered for macOS builds:
-
-    * ``travis.osx_image`` (``str``) Same value as ``TRAVIS_OSX_IMAGE``
-    * ``travis.xcode_sdk`` (``str``) Same value as ``TRAVIS_XCODE_SDK``
-    * ``travis.xcode_scheme`` (``str``) Same value as ``TRAVIS_XCODE_SCHEME``
-
-    .. note::
-       The following values are set depending on which language(s) the build uses:
-
-    * ``travis.languages.dart`` (``str``) Version of Dart
-      being used. Same value as ``TRAVIS_DART_VERSION``.
-    * ``travis.languages.go`` (``str``) Version of Go
-      being used. Same value as ``TRAVIS_GO_VERSION``.
-    * ``travis.languages.haxe`` (``str``) Version of Haxe
-      being used. Same value as ``TRAVIS_HAXE_VERSION``.
-    * ``travis.languages.jdk`` (``str``) Version of JDK
-      being used. Same value as ``TRAVIS_JDK_VERSION``.
-    * ``travis.languages.julia`` (``str``) Version of Julia
-      being used. Same value as ``TRAVIS_JULIA_VERSION``.
-    * ``travis.languages.node`` (``str``) Version of Node
-      being used. Same value as ``TRAVIS_NODE_VERSION``.
-    * ``travis.languages.otp`` (``str``) Version of OTP
-      being used. Same value as ``TRAVIS_OTP_VERSION``.
-    * ``travis.languages.perl`` (``str``) Version of Perl
-      being used. Same value as ``TRAVIS_PERL_VERSION``.
-    * ``travis.languages.php`` (``str``) Version of PHP
-      being used. Same value as ``TRAVIS_PHP_VERSION``.
-    * ``travis.languages.python`` (``str``) Version of Python
-      being used. Same value as ``TRAVIS_PYTHON_VERSION``.
-    * ``travis.languages.r`` (``str``) Version of R
-      being used. Same value as ``TRAVIS_R_VERSION``.
-    * ``travis.languages.ruby`` (``str``) Version of Ruby
-      being used. Same value as ``TRAVIS_RUBY_VERSION``.
-    * ``travis.languages.rust`` (``str``) Version of Rust
-      being used. Same value as ``TRAVIS_RUST_VERSION``.
-    * ``travis.languages.scala`` (``str``) Version of Scala
-      being used. Same value as ``TRAVIS_SCALA_VERSION``.
-
-    .. note::
-       See the Travis Documentation for Environment Variables
-       for more information
-    """
-
     name = "travis"
-    priority = DataSource.PRI_CI
+    priority = const.PRIORITY_SERVICE
 
     def is_active(self):
         return (
@@ -67,7 +13,7 @@ class TravisSource(DataSource):
         )
 
     def get_values(self):
-        project_owner, project_name = self._split_project_slug(
+        project_owner, project_name = utils.split_project_slug(
             self.context.get_from_environ("TRAVIS_REPO_SLUG")
         )
 
@@ -79,7 +25,7 @@ class TravisSource(DataSource):
             const.BRANCH: self.context.get_from_environ("TRAVIS_BRANCH"),
             const.TAG: self.context.get_from_environ("TRAVIS_TAG"),
             const.SERVICE: "travis",
-            const.BUILD_ID: "travis%s"
+            const.BUILD_ID: "travis-%s"
             % (self.context.get_from_environ("TRAVIS_JOB_NUMBER")),
         }
         travis = {
@@ -157,7 +103,3 @@ class TravisSource(DataSource):
         )
 
         return {"travis": travis, "build": build}
-
-    @staticmethod
-    def _split_project_slug(slug):
-        return tuple(slug.split("/"))

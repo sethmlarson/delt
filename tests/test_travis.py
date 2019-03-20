@@ -21,7 +21,7 @@ def test_travis_context():
         "TRAVIS_SECURE_ENV_VARS": "false",
         "TRAVIS_SUDO": "true",
         "TRAVIS_JOB_NUMBER": "1.1",
-        "TRAVIS_JOB_WEB_URL": "https://travis-ci.org/delt-io/delt/jobs/457146029"
+        "TRAVIS_JOB_WEB_URL": "https://travis-ci.org/delt-io/delt/jobs/457146029",
     }
     source = TravisSource(context)
 
@@ -33,7 +33,7 @@ def test_travis_context():
             "pull_request": 1,
             "commit": "abcdef",
             "branch": "master",
-            "build_id": "travis1.1",
+            "build_id": "travis-1.1",
             "tag": None,
             "service": "travis",
             "url": "https://travis-ci.org/delt-io/delt/jobs/457146029",
@@ -44,12 +44,10 @@ def test_travis_context():
             "dist": "trusty",
             "infra": "ec2",
             "os_name": "linux",
-            "python": {
-                "version": "3.6",
-            },
+            "python": {"version": "3.6"},
             "secure_env_vars": False,
             "sudo": True,
-        }
+        },
     }
 
     assert "TRAVIS" not in context.environ

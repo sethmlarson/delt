@@ -4,7 +4,6 @@ from ._base import DataSource
 
 class AptSource(DataSource):
     name = "apt"
-    priority = DataSource.PRI_PM
 
     apt_list_regex = re.compile(r"^([^/]+)/[^\s]+\s+([^\s]+)")
 

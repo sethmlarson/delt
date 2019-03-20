@@ -4,7 +4,6 @@ from ._base import DataSource
 
 class CondaSource(DataSource):
     name = "conda"
-    priority = DataSource.PRI_PM
 
     conda_list_regex = re.compile(r"^([^#][^\s]*)\s+([^\s]+)")
     conda_env_regex = re.compile(r"^([^#][^\s]*)([\s*]+)")

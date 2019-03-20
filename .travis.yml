@@ -12,10 +12,11 @@ cache:
 
 matrix:
   include:
-    - python: 3.6
+    - python: 3.7
       env: TOXENV=lint
-    - python: 3.6
-      env: TOXENV=docs
+      sudo: required
+      dist: xenial
+
     - python: 2.7
       env: TOXENV=py27
     - python: 3.4
@@ -29,12 +30,12 @@ matrix:
       sudo: required
       dist: xenial
 
-install:
-  - python -m pip install -U tox
-
 before_install:
   - python setup.py install
   - delt --debug
+
+install:
+  - python -m pip install -U tox
 
 script:
   - tox

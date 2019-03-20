@@ -47,7 +47,7 @@ class DeltContext(object):
     }
 
     env_path_delimiter = ";" if sys.platform == "win32" else ":"
-    env_delimited_names = {"PATH", "LD_LIBRARY_PATH"}
+    env_delimited_names = {"PATH", "LD_LIBRARY_PATH", "PSMODULEPATH", "PYTHONPATH"}
 
     def __init__(self, args):
         self.args = args
@@ -55,6 +55,10 @@ class DeltContext(object):
         self.build_info = {"delt": {"version": __version__}}
 
         self.pop_from_environ(["LS_COLORS", "PS1", "PS2", "PS3", "PS4", "OLDPWD"])
+
+        self.debug("Initial environment variables are:")
+        for name, value in sorted(self.environ.items()):
+            self.debug("%s=%s" % (name, value))
 
     def log(self, message, color=WHITE):
         self._output(message, color=color)

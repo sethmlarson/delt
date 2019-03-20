@@ -24,3 +24,9 @@ def merge_dict(old, new):
         else:
             old[name] = value
     return old
+
+
+def split_project_slug(slug):
+    if "/" not in slug:
+        return None, None
+    return tuple(slug.split("/", 1))

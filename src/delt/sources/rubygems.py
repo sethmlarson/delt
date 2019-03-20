@@ -4,7 +4,6 @@ from ._base import DataSource
 
 class RubyGemsSource(DataSource):
     name = "rubygems"
-    priority = DataSource.PRI_PM
 
     gem_list_regex = re.compile(r"^([^=]+)\s+\(([^)]+)\)$")
 

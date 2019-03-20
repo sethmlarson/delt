@@ -12,3 +12,6 @@ PROJECT_HOST = "project_host"
 PROJECT_OWNER = "project_owner"
 PROJECT_NAME = "project_name"
 BUILD_ID = "build_id"
+
+PRIORITY_PROJECT = 2
+PRIORITY_SERVICE = 1

@@ -4,7 +4,6 @@ from ._base import DataSource
 
 class PipSource(DataSource):
     name = "pip"
-    priority = DataSource.PRI_PM
 
     pip_freeze_regex = re.compile(r"^([^=]+)==([^=]+)$")
 

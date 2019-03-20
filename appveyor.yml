@@ -1,0 +1,27 @@
+skip_branch_with_pr: true
+build: off
+
+environment:
+  matrix:
+    - PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7.x"
+      PYTHON_ARCH: 64
+      TOXENV: "py27"
+
+    - PYTHON: "C:\\Python37-x64"
+      PYTHON_VERSION: "3.7.x"
+      PYTHON_ARCH: 64
+      TOXENV: "py37"
+
+cache:
+  - "C:\\Users\\appveyor\\AppData\\Local\\pip\\cache"
+
+install:
+  - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+  - pip install tox virtualenv
+
+  - python setup.py install
+  - delt --debug
+
+test_script:
+  - tox
