@@ -14,6 +14,9 @@ from .git import GitSource
 from .conda import CondaSource
 from .virtualenv import VirtualenvSource
 from .gitlab_ci import GitLabCISource
+from .node import NodeSource
+from .npm import NpmSource
+from .yarn import YarnSource
 
 __all__ = [
     "DataSource",
@@ -32,4 +35,7 @@ __all__ = [
     "CondaSource",
     "VirtualenvSource",
     "GitLabCISource",
+    "NodeSource",
+    "NpmSource",
+    "YarnSource",
 ]
