@@ -20,8 +20,11 @@ Is this your current implementation of "debugging" your build environment?
 * Changes that don't affect the build status go unnoticed.
 * No notifications of changes or commit statuses.
 
+Example using Delt
+------------------
+
 **There has to be a better way!** Integrating Delt into your builds is just one line of bash.
-Here's an example using Travis:
+Here's an example using CircleCI:
 
 .. code-block:: yaml
 
@@ -29,7 +32,7 @@ Here's an example using Travis:
       - install your dependencies...
 
     before_script:
-      - pip install -U delt && delt
+      - pip install -U delt && delt store && delt upload
 
     script:
       - run your tests...
@@ -39,41 +42,76 @@ And then navigating to ``delt.io`` for this build you'll see:
 .. code-block:: json
 
     {
-      "apt.version": "",
-      "apt.packages": {
-        "openssl": "1.0.2k",
-        "...": "..."
+      "apt": {
+        "packages": {
+          "acl": "2.2.52-2",
+          "adduser": "3.113+nmu3",
+          "...": "..."
+        },
+        "version": "1.0.9.8.4"
       },
-      "delt.version": "1.0.0",
+      "build": {
+        "branch": "js",
+        "build_id": "circleci-40.1",
+        "commit": "1bbc83d08e800b8d5eacd1e422415c1277077a26",
+        "committed_at": "2019-03-20 03:20:10",
+        "project_host": "github",
+        "project_name": "delt",
+        "project_owner": "delt-io",
+        "pull_request": 32,
+        "service": "circleci",
+        "tag": null,
+        "url": "https://circleci.com/gh/delt-io/delt/40"
+      },
+      "circleci": {
+        "job_name": "build",
+        "workflow_id": "4dec9617-3cf0-403d-b08a-fdaf85fb79aa"
+      },
+      "delt": {
+        "version": "0.1.0"
+      },
       "env": {
-        "USER": "travis",
-        "HOME": "/home/travis",
+        "BASH_ENV": "/tmp/.bash_env-5c91b1706932e90008bd343b-0-build",
+        "DEBIAN_FRONTEND": "noninteractive",
+        "GPG_KEY": "0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D",
+        "HOME": "/home/circleci",
+        "HOSTNAME": "64c5b693690f",
+        "LANG": "C.UTF-8",
+        "NO_PROXY": "127.0.0.1,localhost,circleci-internal-outer-build-agent",
         "PATH": [
+          "/home/circleci/repo/venv/bin",
           "/usr/local/bin",
+          "/usr/local/sbin",
+          "/usr/local/bin",
+          "/usr/sbin",
           "/usr/bin",
+          "/sbin",
           "/bin"
         ],
-        "...": "..."
+        "PWD": "/home/circleci/repo",
+        "SHLVL": "1",
+        "SSH_AUTH_SOCK": "/tmp/circleci-258802883/ssh_auth_sock",
+        "_": "/home/circleci/repo/venv/bin/delt"
       },
-      "python.version": "3.6.6",
-      "python.impl": "cpython",
-      "pip.version": "18.1",
-      "pip.packages": {
-        "pytest": "3.10.1",
-        "...": "..."
+      "git": {
+        "version": "2.1.4"
       },
-      "openssl.version": "1.0.2k-fips",
-      "os.id": "ubuntu",
-      "os.version": "14.04.5",
-      "travis.allow_failure": false,
-      "travis.trigger": "push",
-      "travis.build_stage": null,
-      "travis.secure_env_vars": false,
-      "travis.os_name": "linux",
-      "travis.dist": "trusty",
-      "travis.sudo": false,
-      "travis.infra": "ec2",
-      "travis.python.version": "3.6"
+      "os": {
+        "id": "debian",
+        "version": "8"
+      },
+      "pip": {
+        "packages": {},
+        "version": "9.0.1"
+      },
+      "python": {
+        "executable": "",
+        "implementation": "cpython",
+        "version": "3.6.1"
+      },
+      "virtualenv": {
+        "path": "/home/circleci/repo/venv"
+      }
     }
 
 * Differences are determined automatically by Delt.
@@ -82,6 +120,21 @@ And then navigating to ``delt.io`` for this build you'll see:
 * Set once and forget about it. Updates and improvements to Delt will affect all your projects.
 * All changes are stored and can be tracked regardless of build status.
 * Notifies you of changes via pull request comments and commit statuses.
+
+Viewing Diffs
+-------------
+
+Using ``delt diff [build-id2] [build-id2]`` or viewing the diffs directly on the website you
+can check the differences between the two builds.
+
+ .. code-block:: diff
+ 
+    $ delt diff circleci-40.1 circleci-41.1
+ 
+    67c67
+    <         "version": "3.6.4"
+    ---
+    >         "version": "3.6.1"
 
 See our documentation on how to integrate with Project Hosts such as GitHub and GitLab and
 Continuous Integration providers such as AppVeyor, Azure Pipelines, CircleCI, GitLab Runner, Semaphore, and Travis.
@@ -94,3 +147,8 @@ What Information does Delt Track?
 - System packages and versions (e.g. ``apt``, ``brew``)
 - Language information, packages and versions (eg ``python``/``pip``, ``nodejs``/``npm``)
 - Environment variables (e.g. ``PATH``, ``LD_LIBRARY_PATH``)
+
+License
+-------
+
+Apache-2.0
