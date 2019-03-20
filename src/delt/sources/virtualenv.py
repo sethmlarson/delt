@@ -1,5 +1,4 @@
 from ._base import DataSource
-from .. import const
 
 
 class VirtualenvSource(DataSource):

@@ -15,8 +15,8 @@ class AppVeyorSource(DataSource):
         project_owner, project_name = utils.split_project_slug(
             self.context.get_from_environ("APPVEYOR_REPO_NAME")
         )
-        build_version = self.context.get_from_environ("APPVEYOR_BUILD_VERSION")
-        job_id = self.context.get_from_environ("APPVEYOR_JOB_ID")
+        build_number = self.context.get_from_environ("APPVEYOR_BUILD_NUMBER")
+        job_number = self.context.get_from_environ("APPVEYOR_JOB_NUMBER")
 
         build = {
             const.PROJECT_OWNER: project_owner,
@@ -25,15 +25,16 @@ class AppVeyorSource(DataSource):
             const.BRANCH: self.context.get_from_environ("APPVEYOR_REPO_BRANCH"),
             const.TAG: self.context.get_from_environ("APPVEYOR_REPO_TAG_NAME"),
             const.SERVICE: "appveyor",
-            const.BUILD_ID: "appveyor-%s"
-            % (self.context.get_from_environ("APPVEYOR_BUILD_VERSION")),
+            const.BUILD_ID: "appveyor-%s-%s" % (build_number, job_number),
         }
 
-        if project_owner and project_name and build_version and job_id:
-            build["url"] = "https://ci.appveyor.com/%s/%s/build/%s/job/%s" % (
+        build_id = self.context.get_from_environ("APPVEYOR_BUILD_ID")
+        job_id = self.context.get_from_environ("APPVEYOR_JOB_ID")
+        if project_owner and project_name and build_id and job_id:
+            build[const.URL] = "https://ci.appveyor.com/%s/%s/build/%s/job/%s" % (
                 project_owner,
                 project_name,
-                build_version,
+                build_id,
                 job_id,
             )
 
@@ -55,7 +56,9 @@ class AppVeyorSource(DataSource):
         if pull_request_number:
             build[const.PULL_REQUEST] = pull_request_number
 
-        self.context.pop_from_environ(["CI", "APPVEYOR", "CONFIGURATION", "PLATFORM"])
+        self.context.pop_from_environ(
+            ["CI", "APPVEYOR", "CONFIGURATION", "PLATFORM", "CI_LINUX", "CI_WINDOWS"]
+        )
         self.context.pop_from_environ(
             [x for x in self.context.environ if x.startswith("APPVEYOR_")]
         )
