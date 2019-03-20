@@ -33,12 +33,11 @@ class AppVeyorSource(DataSource):
 
         # AppVeyor does this weird thing where the project owner
         # isn't necessarily the same owner as the CI project
-        appveyor_project_owner, appveyor_project_name = utils.split_project_slug(
-            self.context.get_from_environ("APPVEYOR_PROJECT_SLUG")
-        )
-        if appveyor_project_owner and appveyor_project_name and build_id and job_id:
+        appveyor_account_name = self.context.get_from_environ("APPVEYOR_ACCOUNT_NAME")
+        appveyor_project_name = self.context.get_from_environ("APPVEYOR_PROJECT_NAME")
+        if appveyor_account_name and appveyor_project_name and build_id and job_id:
             build[const.URL] = "https://ci.appveyor.com/%s/%s/build/%s/job/%s" % (
-                appveyor_project_owner,
+                appveyor_account_name,
                 appveyor_project_name,
                 build_id,
                 job_id,
