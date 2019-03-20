@@ -1,4 +1,3 @@
-import re
 import json
 import six
 from ._base import DataSource
@@ -6,8 +5,6 @@ from ._base import DataSource
 
 class NpmSource(DataSource):
     name = "npm"
-
-    pip_freeze_regex = re.compile(r"^([^=]+)==([^=]+)$")
 
     def is_active(self):
         return self.context.get_returncode_from_popen("npm --version")

@@ -18,3 +18,4 @@ Unreleased (master)
 * Added support for Virtualenv
 * Added support for GitLab CI and GitLab Runner
 * Added support for AppVeyor
+* Added support for Node, NPM, and Yarn
