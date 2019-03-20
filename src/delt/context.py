@@ -47,7 +47,7 @@ class DeltContext(object):
     }
 
     env_path_delimiter = ";" if sys.platform == "win32" else ":"
-    env_delimited_names = {"PATH", "LD_LIBRARY_PATH"}
+    env_delimited_names = {"PATH", "LD_LIBRARY_PATH", "PSMODULEPATH", "PYTHONPATH"}
 
     def __init__(self, args):
         self.args = args
